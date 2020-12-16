@@ -1,0 +1,108 @@
+{% extends "main/monitor.html" %}
+
+{% load utils %}
+{% load django_bootstrap_breadcrumbs %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "Job runs" "job_session" %}
+{% endblock %}
+
+{% block mainsection1 %} 
+<div class="card" style="min-height: 50vh; max-width: 100%; overflow-x: scroll;">
+  <nav class="navbar  navbar-expand-lg navbar-light ">
+    <div class="btn-group mr-2">
+      <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown">
+          {{status_selected}}
+      </button>
+      <div class="dropdown-menu">
+        {% for key, value in status_options.items %} 
+          <a class="dropdown-item" href="?{% url_append request 'status_option' key%}">{{key}}</a>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="btn-group mr-2">
+      <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown">
+          {{date_selected}}
+      </button>
+      <div class="dropdown-menu">
+        {% for key, value in date_options.items %} 
+          <a class="dropdown-item" href="?{% url_append request 'date_option' key%}">{{key}} {{value | get_dict:'range'}}</a>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="btn-group mr-auto">
+      <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown">
+          {{application_selected}}
+      </button>
+      <div class="dropdown-menu">
+        {% for key, value in application_options.items %} 
+          <a class="dropdown-item" href="?{% url_append request 'application_option' key%}">{{key}}</a>
+        {% endfor %}
+      </div>
+    </div>
+    <a type="button" class="btn btn-info float-right" href="{% url 'job_session' %}">Clear filters</a>
+  </nav>
+  <br>
+  {% if job_sessions_metadata|length > 0 %}
+    <div class="information">
+        <p>Showing {{job_sessions_metadata|length}} of {{job_sessions_metadata_count}} items</p>
+    </div>
+    <table class="table table-sm table-striped table-bordered">
+        <thead>
+          <tr> 
+            <th scope="col">
+              <a href="?{% url_append request 'order_by' 'name' '-' %}" style="color: inherit;">Jobs</a>
+              {% sort_direction request 'name'%}
+            </th>
+            <th scope="col">
+              <a href="?{% url_append request 'order_by' 'execution_id' '-' %}" style="color: inherit;">Execution id</a>
+              {% sort_direction request 'execution_id'%}
+            </th>
+            <th scope="col">
+              <a href="?{% url_append request 'order_by' 'timestamp' '-' %}" style="color: inherit;">Run start</a>
+              {% sort_direction request 'timestamp'%}
+            </th>
+            <th scope="col">
+              <a href="?{% url_append request 'order_by' 'execution_time' '-' %}" style="color: inherit;">Duration</a>
+              {% sort_direction request 'execution_time'%}
+            </th>
+            <th scope="col">
+              <a href="?{% url_append request 'order_by' 'application' '-' %}" style="color: inherit;">Application</a>
+              {% sort_direction request 'application'%}
+            </th>
+            <th scope="col">
+              <a href="?{% url_append request 'order_by' 'status_type' '-' %}" style="color: inherit;">Status</a>
+              {% sort_direction request 'status_type'%}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for metadata in job_sessions_metadata %}
+            <tr>
+                <td>
+                  <a href="{% url 'job_session' metadata.pk%}">
+                    {{metadata.job_session.job}}_{{metadata.pk}}
+                  </a>
+                </td>
+                <td>{{metadata.job_session.execution_id}}</td>
+                <td>{{metadata.job_session.create_timestamp}}</td>
+                <td>{{metadata.actual_execution_time}}</td>
+                <td>{{metadata.job_session.application_session.application}}</td>
+                <td>
+                    <i 
+                      class="{{metadata.status_type | status_icon}}" 
+                      style="color: {{metadata.status_type | status_color}};" 
+                      aria-hidden="true">
+                    </i>
+                      {{metadata.get_status_label}}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+  {% else %}
+    <p>No job sessions found</p>
+  {% endif %}
+</div>
+{% endblock %}

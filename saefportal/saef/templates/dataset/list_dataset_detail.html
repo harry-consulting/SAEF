@@ -1,0 +1,38 @@
+<div id='property-table'>
+    <table >
+        <tr>
+            <th>Property </th>  
+            <th>Value </th>
+        </tr>
+
+        {% for label, text in names %}
+        <tr>
+            <td> {{ label }} : </td> 
+            <td> {{ text }} </td>
+        </tr>
+        {% endfor %}
+
+        <tr>
+            <td> Columns : </td> 
+            <td> 
+                
+                    {% for column in dataset_metadata_column %}
+                        {{ column.column_name }} : {{ column.data_type }} <br>
+                    {% endfor %} 
+                
+            </td>
+        </tr>    
+        
+        <tr>
+            <td> Constraints : </td> 
+            <td> 
+                
+                    {% for constraint in dataset_metadata_constraint %}
+                        {{ constraint.constraint_name }} : {{ constraint.constraint_type }} <br>
+                    {% endfor %} 
+                
+            </td>
+        </tr>  
+
+    </table>
+</div>

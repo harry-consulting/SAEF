@@ -1,0 +1,12 @@
+{% extends "main/manage.html" %}
+{% load crispy_forms_tags %}
+
+{% block mainsection1 %} 
+    <div class="card">
+        <h3> Add Dataset </h3>
+        <form action="" method="post">
+            {% crispy select_connection_form select_connection_form.helper %}
+        </form>
+    </div>
+{% endblock mainsection1 %}
+

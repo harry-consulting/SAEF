@@ -1,0 +1,14 @@
+[
+  {
+    "model": "saef.applicationtoken",
+    "pk": 1,
+    "fields": {
+      "application_token": "6d8322d7-b79d-4bb3-a222-7012b22059a1",
+      "name": "Adw Token",
+      "business_owner": "Harry Consulting",
+      "application_group_name": "test_group_1",
+      "created_by": "Harry Huang",
+      "create_timestamp": "2020-04-12T20:26:29.477Z"
+    }
+  }
+]

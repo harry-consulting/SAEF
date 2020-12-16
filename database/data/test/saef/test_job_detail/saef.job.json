@@ -1,0 +1,42 @@
+[
+  {
+    "model": "saef.job",
+    "pk": 1,
+    "fields": {
+      "application": 2,
+      "name": "LoadDimCustomer",
+      "description": "The job flow that builds customer dimension from source tables",
+      "create_timestamp": "2020-04-23T21:13:59.440Z"
+    }
+  },
+  {
+    "model": "saef.job",
+    "pk": 2,
+    "fields": {
+      "application": 2,
+      "name": "LoadProduct",
+      "description": "The job that loads Production dimension",
+      "create_timestamp": "2020-04-24T19:01:07.145Z"
+    }
+  },
+  {
+    "model": "saef.job",
+    "pk": 3,
+    "fields": {
+      "application": 2,
+      "name": "LoadSales",
+      "description": "The job that loads Sales Fact",
+      "create_timestamp": "2020-04-24T19:01:33.280Z"
+    }
+  },
+  {
+    "model": "saef.job",
+    "pk": 5,
+    "fields": {
+      "application": 20,
+      "name": "test2",
+      "description": "descr for test 2",
+      "create_timestamp": "2020-05-30T12:51:55.485Z"
+    }
+  }
+]

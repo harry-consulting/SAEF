@@ -1,0 +1,142 @@
+{% extends "main/monitor.html" %}
+
+{% load static %}
+{% load charts.line %} 
+{% load utils %}
+{% load tables.column_profile %}
+{% load django_bootstrap_breadcrumbs %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    {% breadcrumb "Dataset runs" "dataset_session" %}
+    {% breadcrumb metadata.session_name "dataset_session" %}
+{% endblock %}
+
+{% block mainsection1 %} 
+
+<!-- Clipboard tooltip -->
+<script type="text/javascript" src="{% static 'saef/js/tooltipCopy.js' %}"></script>
+
+<div class="card" style="overflow: auto;">
+  {% if metadata %}
+    <div class="row row-cols-2">
+      <div class="col col-lg-4">
+        <h4>Run info</h4>
+        <div class="row" style="border-bottom: 1px solid;">
+          <div class="col-sm description text-secondary">
+            <b>Status</b>
+          </div>
+          <div class="col-sm result">
+            <i
+              class="{{metadata.status_type | status_icon}}"
+              style="color: {{metadata.status_type | status_color}};"
+              aria-hidden="true"
+            >
+            </i>
+            {{metadata.get_status_label}}
+          </div>
+        </div>
+        <div class="row" style="border-bottom: 1px solid;">
+          <div class="col-sm description text-secondary">
+            <b>Started</b>
+          </div>
+          <div class="col-sm result">
+            {{metadata.session_created}}
+          </div>
+        </div>
+        <div class="row" style="border-bottom: 1px solid;">
+          <div class="col-sm description text-secondary">
+            <b>Execution ID</b>
+          </div>
+          <div class="col-sm result">
+            <p>{{metadata.dataset_session.execution_id}}
+              <i class="fa fa-clipboard" 
+              aria-hidden="true" 
+              style="cursor: pointer;" 
+              data-clipboard-text={{metadata.dataset_session.execution_id}}></i></p>
+          </div>
+        </div>
+        <div class="row" style="border-bottom: 1px solid;">
+          <div class="col-sm description text-secondary">
+            <b>Degree of change</b>
+          </div>
+          <div class="col-sm result">
+            <p>{{metadata.dataset_session.degree_of_change}} </p>
+          </div>
+        </div>
+        <div class="row" style="border-bottom: 1px solid;">
+            <div class="col-sm description text-secondary">
+              <b>Row count</b>
+            </div>
+            <div class="col-sm result">
+              {{actual_dataset_profile.row_count}} <small>({{expected_dataset_profile.row_count}})</small>
+            </div>
+        </div>
+        <div class="row" style="border-bottom: 1px solid;">
+            <div class="col-sm description text-secondary">
+              <b>Column count</b>
+            </div>
+            <div class="col-sm result">
+                {{actual_dataset_profile.column_count}} <small>({{expected_dataset_profile.column_count}})</small>
+            </div>
+        </div>
+        <div class="row" style="border-bottom: 1px solid;">
+            <div class="col-sm description text-secondary">
+              <b>Hash sum</b>
+            </div>
+            <div class="col-sm result">
+                {{actual_dataset_profile.hash_sum}} <small>({{expected_dataset_profile.hash_sum}})</small>
+            </div>
+        </div>
+        <h4 class="mt-4">Recent dataset runs</h4>
+        <div class="list-group list-group-flush">
+          {% for metadata in recent_dataset_sessions_metadata %}
+          <li class="list-group-item">
+            <a
+              href="{% url 'dataset_session' metadata.pk%}"
+              style="display: block; text-decoration: none;"
+            >
+              {{metadata.dataset_session.create_timestamp}}
+            </a>
+          </li>
+          {% endfor %}
+        </div>
+        {% if recent_dataset_sessions_metadata %}
+            {% chart_line recent_dataset_sessions_metadata %}
+        {% endif %}
+      </div>
+      <div class="col-8">
+      {% if actual_column_profile %}
+      <h4>Column profiles</h4>
+      <form method="POST" >
+        {% csrf_token %}
+        {% for column in actual_column_profile %} 
+        <div class='border rounded' style="cursor: pointer; margin: 2em;">
+          <button type="submit" name="selected" value='{{column.name}}' 
+                  class="dropdown-item" onclick="$(this).closest('form').submit()">
+            <div style="margin: 1em;">
+              {% if column.name|lookup_bool:selected_columns %}
+                <input type="hidden" name="{{column.name}}" value="true">
+                <h5>{{column.name}}<div class="pull-right">-</div></h5>
+                <div class="card-text">
+                  {% table_column_profile column.name actual_dataset_profile.pk %}
+                </div>
+              {% else %}
+                <input type="hidden" name="{{column.name}}" value="false">
+                <h5>{{column.name}}<div class="pull-right">+</div></h5>
+              {% endif %}
+            </div>
+          </button>
+        </div>
+        {% endfor %}
+      </form>
+    {% else %}
+      <h4>No actual columns found</h4>
+    {% endif %}
+      </div>
+    </div>
+  {% else %}
+    <h4>Dataset session not found</h4>
+  {% endif %}
+</div>
+{% endblock %} 

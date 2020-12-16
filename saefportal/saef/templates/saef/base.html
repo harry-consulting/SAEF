@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <!-- jquery and popper -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+
+    <!-- chartjs and label plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+    <!-- Google chart -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <!-- Clipboard -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+    
+    {% block initialization %} 
+    {% load static %}
+
+    <link rel="icon" href="{% static 'saef/images/icon.ico' %}">
+
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="{% static 'saef/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'saef/style.css' %}">
+    {% endblock %}
+    
+
+<title>{% block title %} The SAEF Portal {% endblock %}</title>
+</head>
+
+{% load django_bootstrap_breadcrumbs %}
+<body> 
+        {% include "saef/header.html" %}
+    <div id = "top-navigation">
+        {% block top-navigation %} {% include "saef/top-navigation.html" %}  {% endblock %}
+    </div>
+
+    {% block breadcrumbs %}
+        {% clear_breadcrumbs %}
+    {% endblock %}
+
+    <div class="row">
+        <div class="col-md-8">
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            {% endif %}
+            {% block content %}
+                {% render_breadcrumbs %}
+            {% endblock %}
+        </div>
+        <div class="leftcolumn">
+            {% block mainsection1 %} {% endblock mainsection1 %}
+            {% block mainsection2 %} {% endblock mainsection2 %}
+            {% block mainsection3 %} {% endblock mainsection3 %}
+            {% block mainsection4 %} {% endblock mainsection4 %}
+        </div>
+
+        <div class="rightcolumn">
+            {% block sidesection1 %} {% endblock %}
+                {% block sidesection2 %} {% endblock %}
+                {% block sidesection3 %} {% endblock %}
+        </div>
+    </div>
+
+    {% include "saef/footer.html" %}
+
+</body>
+</html>
+

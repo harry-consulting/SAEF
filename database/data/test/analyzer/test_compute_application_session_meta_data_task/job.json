@@ -1,0 +1,12 @@
+[
+  {
+    "model": "saef.job",
+    "pk": 1,
+    "fields": {
+      "application": 2,
+      "name": "LoadDimCustomer",
+      "description": "The job flow that builds customer dimension from source tables",
+      "create_timestamp": "2020-04-23T21:13:59.440Z"
+    }
+  }
+]

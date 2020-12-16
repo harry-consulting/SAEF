@@ -1,0 +1,77 @@
+[
+{
+    "model": "analyzer.actualcolumnprofile",
+    "pk": 1,
+    "fields": {
+        "dataset_profile": 1,
+        "name": "id",
+        "min": "1",
+        "max": "5",
+        "uniqueness": 1.0,
+        "datatype": "integer",
+        "nullable": true,
+        "order": 0,
+        "hash_sum": 7136
+    }
+},
+{
+    "model": "analyzer.actualcolumnprofile",
+    "pk": 2,
+    "fields": {
+        "dataset_profile": 1,
+        "name": "name",
+        "min": null,
+        "max": null,
+        "uniqueness": 1.0,
+        "datatype": "character varying",
+        "nullable": true,
+        "order": 1,
+        "hash_sum": 8912
+    }
+},
+{
+    "model": "analyzer.actualcolumnprofile",
+    "pk": 3,
+    "fields": {
+        "dataset_profile": 1,
+        "name": "description",
+        "min": null,
+        "max": null,
+        "uniqueness": 1.0,
+        "datatype": "character varying",
+        "nullable": true,
+        "order": 2,
+        "hash_sum": 8913
+    }
+},
+{
+    "model": "analyzer.actualcolumnprofile",
+    "pk": 4,
+    "fields": {
+        "dataset_profile": 1,
+        "name": "create_timestamp",
+        "min": "2020-04-23 23:13:59.440000+02:00",
+        "max": "2020-05-30 14:51:55.485000+02:00",
+        "uniqueness": 1.0,
+        "datatype": "timestamp with time zone",
+        "nullable": true,
+        "order": 3,
+        "hash_sum": 12094
+    }
+},
+{
+    "model": "analyzer.actualcolumnprofile",
+    "pk": 5,
+    "fields": {
+        "dataset_profile": 1,
+        "name": "application_id",
+        "min": "2",
+        "max": "20",
+        "uniqueness": 0.5,
+        "datatype": "integer",
+        "nullable": true,
+        "order": 4,
+        "hash_sum": 7190
+    }
+}
+]

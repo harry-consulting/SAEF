@@ -1,0 +1,18 @@
+.add input {
+ background-color: green;
+}
+
+.add {
+    background-color: green;
+}
+
+.changes input {
+ background-color: yellow;
+}
+.changes {
+    background-color: yellow;
+}
+
+.delete {
+    background-color: red;
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "model": "sessions.session",
+    "pk": "13ml1b4mnxoqdgf91pes65lll4nn9pkc",
+    "fields": {
+      "session_data": "Yjc3YjExM2Y2OGJhZTQ5OGQ4ZjM4YTA0MTliYmVjZTZhNDQzNGFjMTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJiNzA5NDg2OWNmY2JhNTFmMDVhNDU0MzI0ODkxZjkxMTcxYjQ0YjNmIn0=",
+      "expire_date": "2020-06-02T19:53:44.090Z"
+    }
+  },
+  {
+    "model": "sessions.session",
+    "pk": "4sbh3k6omrp8tfw0lmrfchmr5w8srjtv",
+    "fields": {
+      "session_data": "Yjc3YjExM2Y2OGJhZTQ5OGQ4ZjM4YTA0MTliYmVjZTZhNDQzNGFjMTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJiNzA5NDg2OWNmY2JhNTFmMDVhNDU0MzI0ODkxZjkxMTcxYjQ0YjNmIn0=",
+      "expire_date": "2020-04-25T19:19:53.055Z"
+    }
+  },
+  {
+    "model": "sessions.session",
+    "pk": "cv1cvgrj8h1qg154j8ivr711kw5t1xz7",
+    "fields": {
+      "session_data": "Yjc3YjExM2Y2OGJhZTQ5OGQ4ZjM4YTA0MTliYmVjZTZhNDQzNGFjMTp7Il9hdXRoX3VzZXJfaWQiOiIxIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiJiNzA5NDg2OWNmY2JhNTFmMDVhNDU0MzI0ODkxZjkxMTcxYjQ0YjNmIn0=",
+      "expire_date": "2020-05-16T20:01:36.964Z"
+    }
+  }
+]

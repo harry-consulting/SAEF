@@ -1,0 +1,26 @@
+[
+  {
+    "model": "saef.connectiontype",
+    "pk": 1,
+    "fields": {
+      "name": "PostgreSQL",
+      "version": "Latest"
+    }
+  },
+  {
+    "model": "saef.connectiontype",
+    "pk": 2,
+    "fields": {
+      "name": "Azure SQL",
+      "version": "Latest"
+    }
+  },
+  {
+    "model": "saef.connectiontype",
+    "pk": 3,
+    "fields": {
+      "name": "Azure Blob Storage",
+      "version": "Latest"
+    }
+  }
+]

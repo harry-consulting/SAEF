@@ -1,0 +1,47 @@
+[
+  {
+    "model": "saef.connection",
+    "pk": 1,
+    "fields": {
+      "name": "AdventureWorksSample",
+      "time_out": 120,
+      "connection_type": 1
+    }
+  },
+  {
+    "model": "saef.connection",
+    "pk": 2,
+    "fields": {
+      "name": "SaefTest",
+      "time_out": 120,
+      "connection_type": 1
+    }
+  },
+  {
+    "model": "saef.connection",
+    "pk": 3,
+    "fields": {
+      "name": "SaefTest3",
+      "time_out": 120,
+      "connection_type": 1
+    }
+  },
+  {
+    "model": "saef.connection",
+    "pk": 4,
+    "fields": {
+      "name": "saefportal22",
+      "time_out": 300,
+      "connection_type": 1
+    }
+  },
+  {
+    "model": "saef.connection",
+    "pk": 5,
+    "fields": {
+      "name": "test_connection",
+      "time_out": 300,
+      "connection_type": 1
+    }
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "model": "saef.application",
+    "pk": 2,
+    "fields": {
+      "application_token": 1,
+      "name": "AdventureWorks",
+      "description": "Application for AdventureWorks data",
+      "application_key": "04d0e89e-b70d-4689-9d40-f0e8fbc16811",
+      "create_timestamp": "2020-03-17T20:20:50.961Z"
+    }
+  },
+  {
+    "model": "saef.application",
+    "pk": 3,
+    "fields": {
+      "application_token": 4,
+      "name": "Northwind",
+      "description": "Northwind application",
+      "application_key": "91598e30-1e74-4b4a-9ea0-be97a5803d7a",
+      "create_timestamp": "2020-04-13T07:15:30.176Z"
+    }
+  },
+  {
+    "model": "saef.application",
+    "pk": 4,
+    "fields": {
+      "application_token": 5,
+      "name": "TheLibrary",
+      "description": "Library Application",
+      "application_key": "7b91f270-f3ac-42b5-90d6-5eed9cd1cc00",
+      "create_timestamp": "2020-04-13T07:23:38.588Z"
+    }
+  },
+  {
+    "model": "saef.application",
+    "pk": 14,
+    "fields": {
+      "application_token": 6,
+      "name": "RESTAPI Test Application",
+      "description": "rest api test",
+      "application_key": "06113f1d-6302-4b4d-8806-98e088342c13",
+      "create_timestamp": "2020-05-04T20:21:14.482Z"
+    }
+  },
+  {
+    "model": "saef.application",
+    "pk": 20,
+    "fields": {
+      "application_token": 5,
+      "name": "test add application 2",
+      "description": "the third test application",
+      "application_key": "eaa4f740-9309-4bd5-8a7d-dd99385d4af2",
+      "create_timestamp": "2020-05-30T09:46:53.674Z"
+    }
+  }
+]

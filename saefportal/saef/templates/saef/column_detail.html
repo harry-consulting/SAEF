@@ -1,0 +1,33 @@
+{% extends "main/manage.html" %}
+
+{% block mainsection1 %} 
+<div class="card"> 
+  <h3> Manage Columns </h3>
+  <form action="" method="get" novalidate>
+      {% csrf_token %}
+      <table>
+        {{ formset.management_form}}
+        {% for form in formset.forms %}
+                <tr class="{% cycle 'row1' 'row2' %} formset_row-{{ formset.prefix }}">
+                    {% for field in form.visible_fields %}
+                    <td>
+                        {{ field.errors.as_ul }}
+                        {{ field }}
+                    </td>
+                    {% endfor %}
+                </tr>
+        {% endfor %}
+
+      </table>
+          <input type="submit" formmethod="post" name = "Operation" value="Save">
+          <input type="submit" formmethod="post" name = "Operation" value="Delete">
+  </form>
+
+  {% if saved %}
+      <p class="success">
+        Data was saved successfully.
+      </p>
+  {% endif %}
+</div>
+{% endblock %}
+

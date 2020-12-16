@@ -1,0 +1,50 @@
+[
+  {
+    "model": "saef.postgresconnection",
+    "pk": 1,
+    "fields": {
+      "db_name": "postgres_test",
+      "username": "aws",
+      "password": "rQGC+7TBdAoUBwyqiU2Kpw==",
+      "host": "255.255.255.255",
+      "port": 8000,
+      "connection": 1
+    }
+  },
+  {
+    "model": "saef.postgresconnection",
+    "pk": 2,
+    "fields": {
+      "db_name": "postgres_test",
+      "username": "saefuser",
+      "password": "rQGC+7TBdAoUBwyqiU2Kpw==",
+      "host": "127.0.0.1",
+      "port": 5432,
+      "connection": 2
+    }
+  },
+  {
+    "model": "saef.postgresconnection",
+    "pk": 3,
+    "fields": {
+      "db_name": "postgres_test",
+      "username": "saefuser",
+      "password": "rQGC+7TBdAoUBwyqiU2Kpw==",
+      "host": "localhost",
+      "port": 5432,
+      "connection": 4
+    }
+  },
+  {
+    "model": "saef.postgresconnection",
+    "pk": 4,
+    "fields": {
+      "db_name": "saefportal",
+      "username": "saefuser",
+      "password": "rQGC+7TBdAoUBwyqiU2Kpw==",
+      "host": "localhost",
+      "port": 5432,
+      "connection": 5
+    }
+  }
+]

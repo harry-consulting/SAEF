@@ -1,0 +1,90 @@
+[
+  {
+    "model": "saef.applicationsession",
+    "pk": 1,
+    "fields": {
+      "application": 2,
+      "create_timestamp": "2020-08-11T10:00:00.123Z",
+      "execution_id": "e011f01f-efc1-4ff9-96b8-b30699989551",
+      "status_time": "2020-02-20T20:20:00Z",
+      "status_type": "START"
+    }
+  },
+  {
+    "model": "saef.applicationsession",
+    "pk": 2,
+    "fields": {
+      "application": 2,
+      "create_timestamp": "2020-08-11T11:30:00.123Z",
+      "execution_id": "e011f01f-efc1-4ff9-96b8-b30699989551",
+      "status_time": "2020-02-20T20:20:00Z",
+      "status_type": "END"
+    }
+  },
+  {
+      "model": "saef.applicationsession",
+      "pk": 3,
+      "fields": {
+        "application": 2,
+        "create_timestamp": "2020-08-11T10:00:00.123Z",
+        "execution_id": "ab663356-35d8-4996-870d-3a86b42ed6f2",
+        "status_time": "2020-02-20T20:20:00Z",
+        "status_type": "START"
+      }
+  },
+  {
+      "model": "saef.applicationsession",
+      "pk": 4,
+      "fields": {
+        "application": 2,
+        "create_timestamp": "2020-08-12T11:30:00.123Z",
+        "execution_id": "ab663356-35d8-4996-870d-3a86b42ed6f2",
+        "status_time": "2020-02-20T20:20:00Z",
+        "status_type": "END"
+      }
+  },
+  {
+      "model": "saef.applicationsession",
+      "pk": 5,
+      "fields": {
+        "application": 2,
+        "create_timestamp": "2020-08-11T10:00:00.123Z",
+        "execution_id": "8e658942-d89a-4cbe-b475-65f4a438cf10",
+        "status_time": "2020-02-20T20:20:00Z",
+        "status_type": "START"
+      }
+  },
+  {
+      "model": "saef.applicationsession",
+      "pk": 6,
+      "fields": {
+        "application": 2,
+        "create_timestamp": "2020-08-11T11:30:00.123Z",
+        "execution_id": "8e658942-d89a-4cbe-b475-65f4a438cf10",
+        "status_time": "2020-02-20T20:20:00Z",
+        "status_type": "END"
+      }
+  },
+  {
+    "model": "saef.applicationsession",
+    "pk": 7,
+    "fields": {
+      "application": 2,
+      "create_timestamp": "2020-08-11T10:00:00.123Z",
+      "execution_id": "57cddc7a-c073-4f0f-8570-4b5d8a87d377",
+      "status_time": "2020-02-20T20:20:00Z",
+      "status_type": "START"
+    }
+  },
+  {
+    "model": "saef.applicationsession",
+    "pk": 8,
+    "fields": {
+      "application": 2,
+      "create_timestamp": "2020-08-11T11:30:00.123Z",
+      "execution_id": "57cddc7a-c073-4f0f-8570-4b5d8a87d377",
+      "status_time": "2020-02-20T20:20:00Z",
+      "status_type": "END"
+    }
+  }
+]

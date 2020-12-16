@@ -1,0 +1,10 @@
+[
+  {
+    "model": "saef.connectiontype",
+    "pk": 1,
+    "fields": {
+      "name": "PostgreSQL",
+      "version": "Latest"
+    }
+  }
+]

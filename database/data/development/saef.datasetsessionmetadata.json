@@ -1,0 +1,26 @@
+[
+{
+    "model": "saef.datasetsessionmetadata",
+    "pk": 1,
+    "fields": {
+        "dataset_session": 1,
+        "status_type": "SUCCEEDED"
+    }
+},
+{
+    "model": "saef.datasetsessionmetadata",
+    "pk": 2,
+    "fields": {
+        "dataset_session": 2,
+        "status_type": "SUCCEEDED"
+    }
+},
+{
+    "model": "saef.datasetsessionmetadata",
+    "pk": 3,
+    "fields": {
+        "dataset_session": 3,
+        "status_type": "SUCCEEDED"
+    }
+}
+]

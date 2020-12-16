@@ -1,0 +1,22 @@
+{% extends "main/manage.html" %}
+
+{% block mainsection1 %} 
+<div class="card"> 
+    <h2>Manage Datasets</h2>
+    <div class= 'crud_menu'>
+        <form method="POST" >
+            <input type="button" onclick= "location.href='/saef/dataset/add/';"  name="Operation" value="Add Dataset" />
+            {% if datasets %}
+                <ul>
+                    {% for dataset in datasets %}
+                        <li> <a href="/saef/dataset/{{dataset.id}}/">{{ dataset.dataset_name }} </a>  Dataset Key: {{dataset.dataset_key}}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}    
+                <p> There is no dataset added yet. </p>
+            {% endif%}
+        </form>
+    </div>
+</div>
+{% endblock %}
+

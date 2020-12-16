@@ -1,0 +1,62 @@
+[
+  {
+    "model": "saef.datasetsession",
+    "pk": 1,
+    "fields": {
+      "create_timestamp": "2020-07-30T10:45:33.905Z",
+      "execution_id": "69489165-dbb3-4a4a-8946-2169d0385862",
+      "status_time": "2020-02-20T20:20:00Z",
+      "dataset_id": 11,
+      "job_session_id": 1,
+      "degree_of_change": 0.6
+    }
+  },
+  {
+    "model": "saef.datasetsession",
+    "pk": 2,
+    "fields": {
+      "create_timestamp": "2020-08-12T10:05:33.905Z",
+      "execution_id": "e9693f40-9b90-4f72-8395-e039a6e284b7",
+      "status_time": "2020-02-20T20:20:00Z",
+      "dataset_id": 11,
+      "job_session_id": 3,
+      "degree_of_change": 0.3
+    }
+  },
+  {
+    "model": "saef.datasetsession",
+    "pk": 3,
+    "fields": {
+      "create_timestamp": "2020-08-12T10:05:33.905Z",
+      "execution_id": "e6512776-018d-4a3f-a5a9-d03026eec4cc",
+      "status_time": "2020-02-20T20:20:00Z",
+      "dataset_id": 11,
+      "job_session_id": 7,
+      "degree_of_change": 0.3
+    }
+  },
+  {
+    "model": "saef.datasetsession",
+    "pk": 4,
+    "fields": {
+      "create_timestamp": "2020-08-12T10:05:33.905Z",
+      "execution_id": "c35222ff-2754-4014-8894-53b1e645d4c6",
+      "status_time": "2020-02-20T20:20:00Z",
+      "dataset_id": 11,
+      "job_session_id": 9,
+      "degree_of_change": 0.6
+    }
+  },
+  {
+    "model": "saef.datasetsession",
+    "pk": 5,
+    "fields": {
+      "create_timestamp": "2020-08-12T10:05:33.905Z",
+      "execution_id": "c35222ff-2754-4014-8894-53b1e645d4c6",
+      "status_time": "2020-02-20T20:20:00Z",
+      "dataset_id": 11,
+      "job_session_id": 9,
+      "degree_of_change": 0.0
+    }
+  }
+]

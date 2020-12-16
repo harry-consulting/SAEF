@@ -1,0 +1,17 @@
+<div class="topnav">
+    <a href="/saef/">Monitor</a>
+    <a href="/saef/manage">Manage</a>
+    <!-- <a href="/analyzer">Analyze</a> -->
+    <!-- <a href="/control">Control</a> -->
+    {% if user.is_authenticated %}
+      <a href="/user/logout" style="float:right">Logout</a>
+      <!-- <a href="/settings" style="float:right">Settings</a> -->
+      {% if user.is_staff %}
+      <a href="/user/admin" style="float:right">Admin</a>
+      {% endif %}
+      {% else %}
+      <a href="/user/login" style="float:right">Login</a>
+      <a href="/user/register" style="float:right">Register</a>
+    {% endif %}
+  </div>
+  

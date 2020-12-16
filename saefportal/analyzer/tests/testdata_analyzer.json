@@ -1,0 +1,16 @@
+{
+  "postgres_connection": {
+    "db_name": "test postgres database",
+    "username": "test username",
+    "password": "test password",
+    "host": "test host",
+    "port": 5432,
+    "connection": {
+      "name": "test connection",
+      "time_out": 300,
+      "connection_type": {
+        "name": "PostgreSQL"
+      }
+    }
+  }
+}

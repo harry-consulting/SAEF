@@ -1,0 +1,13 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'saef/style.css' %}">
+
+<h1>{{ dataset.dataset_name }}</h1>
+<ul>
+    <li>Application: {{ dataset.application }}</li>
+    <li>Name: {{ dataset.dataset_name }}</li>
+    <li>Type: {{ dataset.dataset_type }}</li>
+    <li>Job Unit: {{ dataset.job_unit_name }}</li>
+    <li>Job Flow: {{ dataset.job_flow_name }}</li>
+    <li>Create TIme: {{ dataset.create_timestamp }}</li>
+</ul>

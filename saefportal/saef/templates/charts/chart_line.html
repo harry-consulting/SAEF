@@ -1,0 +1,38 @@
+<canvas id="line_chart" width="400" height="400"></canvas>
+<script>
+   var labels = {{labels|safe}};
+   var label_dates = [];
+   var datasets = {{datasets|safe}};
+
+   for (i = 0; i < labels.length; i++)
+   {
+    label_dates.push(new Date(labels[i]*1000));
+   }
+
+   var ctx = document.getElementById('line_chart').getContext('2d');
+   var myLineChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+    labels: labels,
+    datasets: datasets
+  },
+  options: {
+    scales: {
+  	  xAxes: [{
+  			  type: 'time',
+  			  distribution: 'linear'
+  		  }],
+  	  yAxes: [{
+  		  ticks: {
+  			  suggestedMin: 0,
+  			  suggestedMax: 1
+  		  }
+  	  }]
+    },
+    title: {
+  	display: true,
+  	text: 'Delta value change'
+    }
+  }
+   });
+</script>

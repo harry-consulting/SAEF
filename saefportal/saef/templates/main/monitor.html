@@ -1,0 +1,15 @@
+{% extends "saef/base.html" %}
+
+
+{% block sidesection1 %} 
+<div class="card"> 
+  <h4> Choose to monitor</h4>
+  <div class="vertical-menu">
+    <a href="{% url 'application_session' %}">Application overview</a> <br>
+    <a href="{% url 'job_session' %}" >Job overview</a> <br>
+    <a href="{% url 'dataset_session' %}">Dataset overview</a> <br>
+  </div>
+</div>
+{% endblock %}
+
+

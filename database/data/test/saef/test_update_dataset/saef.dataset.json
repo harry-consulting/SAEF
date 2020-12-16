@@ -1,0 +1,87 @@
+[
+  {
+    "model": "saef.dataset",
+    "pk": 1,
+    "fields": {
+      "connection": 2,
+      "job": 1,
+      "sequence_in_job": 2,
+      "dataset_key": "04d0e89e-b70d-4689-9d40-f0e8fbc16811",
+      "dataset_name": "Person.Person",
+      "dataset_type": "INPUT",
+      "query_timeout": 300,
+      "dataset_access_method": "TABLE",
+      "dataset_extraction_sql": "{'Table':'Person.Person'}",
+      "dataset_extraction_table": "public.saef_job",
+      "create_timestamp": "2020-04-13T07:25:25.922Z"
+    }
+  },
+  {
+    "model": "saef.dataset",
+    "pk": 11,
+    "fields": {
+      "connection": 2,
+      "job": 1,
+      "sequence_in_job": 2,
+      "dataset_key": "04d0e55e-b70d-4689-9d40-f0e8fbc16811",
+      "dataset_name": "Person.Person2",
+      "dataset_type": "INPUT",
+      "query_timeout": 300,
+      "dataset_access_method": "TABLE",
+      "dataset_extraction_sql": "SELECT * FROM saef_job",
+      "dataset_extraction_table": "public.saef_job",
+      "create_timestamp": "2020-04-13T07:25:25.922Z"
+    }
+  },
+  {
+    "model": "saef.dataset",
+    "pk": 12,
+    "fields": {
+      "connection": 1,
+      "job": 1,
+      "sequence_in_job": 2,
+      "dataset_key": "04d0e55e-b70d-4689-9d40-f0e8fbc16812",
+      "dataset_name": "Test.Dataset",
+      "dataset_type": "INPUT",
+      "query_timeout": 300,
+      "dataset_access_method": "TABLE",
+      "dataset_extraction_sql": "SELECT * FROM saef_job",
+      "dataset_extraction_table": "public.saef_job",
+      "create_timestamp": "2020-04-13T07:25:25.922Z"
+    }
+  },
+  {
+    "model": "saef.dataset",
+    "pk": 13,
+    "fields": {
+      "connection": 2,
+      "job": 1,
+      "sequence_in_job": 2,
+      "dataset_key": "04d0e55e-b70d-4689-9d40-f0e8fbc16813",
+      "dataset_name": "Test.Dataset2",
+      "dataset_type": "INPUT",
+      "query_timeout": 300,
+      "dataset_access_method": "SQL",
+      "dataset_extraction_sql": "Invalid SQL Query",
+      "dataset_extraction_table": "public.saef_job",
+      "create_timestamp": "2020-04-13T07:25:25.922Z"
+    }
+  },
+  {
+    "model": "saef.dataset",
+    "pk": 14,
+    "fields": {
+      "connection": 2,
+      "job": 1,
+      "sequence_in_job": 2,
+      "dataset_key": "04d0e55e-b70d-4689-9d40-f0e8fbc16814",
+      "dataset_name": "Test.Dataset3",
+      "dataset_type": "INPUT",
+      "query_timeout": 300,
+      "dataset_access_method": "SQL",
+      "dataset_extraction_sql": "SELECT * FROM saef_wrongtable",
+      "dataset_extraction_table": "public.saef_job",
+      "create_timestamp": "2020-04-13T07:25:25.922Z"
+    }
+  }
+]

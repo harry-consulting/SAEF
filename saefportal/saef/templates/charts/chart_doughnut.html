@@ -1,0 +1,76 @@
+<canvas id={{ canvas_id }}></canvas>
+<script>
+    Chart.plugins.register({
+        afterDraw: function(chart) {
+            if (chart.data.datasets[0].data.every(item => item === 0)) {
+                let ctx = chart.chart.ctx;
+                let width = chart.chart.width;
+                let height = chart.chart.height;
+
+                chart.clear();
+                ctx.save();
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('No data to display', width / 2, height / 2);
+                ctx.restore();
+            }
+        }
+    });
+    var ctx = document.getElementById("{{ canvas_id }}").getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            datasets: [
+                {
+                    label: "Status type",
+                    data: [{{ success }}, {{ issue }}, {{ failed }}],
+                    datalabels: {
+                        anchor: "end"
+                    },
+                    backgroundColor: [
+                        "rgb(0,198,8)",
+                        "rgb(249,183,61)",
+                        "rgba(214,0,0,0.81)"
+                    ]
+                }
+            ],
+            labels: [
+                "Success",
+                "Issue",
+                "Failed"
+            ]
+        },
+        options: {
+            layout: {
+                padding: {
+                    top: 10,
+                    bottom: 10
+                }
+            },
+            responsive: true,
+            legend: {
+                display: false
+            },
+            animation: {
+                animateRotate: false
+            },
+            plugins: {
+                datalabels: {
+                    color: 'black',
+                    font: {
+                        size: 16,
+                        weight: 'bold'
+                    },
+                    formatter: (value, ctx) => {
+                        let sum = 0;
+                        let dataArr = ctx.chart.data.datasets[0].data;
+                        dataArr.map(data => {
+                            sum += data;
+                        });
+                        return (value * 100 / sum).toFixed(2) + "%";
+                    },
+                }
+            }
+        }
+    });
+</script>

@@ -1,0 +1,32 @@
+[
+{
+    "model": "saef.datasetsessionmetadata",
+    "pk": 1,
+    "fields": {
+        "dataset_session": 1,
+        "actual_execution_time": "12 20:46:49.075498",
+        "expected_execution_time": "12 20:46:49.075498",
+        "status_type": "SUCCEEDED"
+    }
+},
+{
+    "model": "saef.datasetsessionmetadata",
+    "pk": 2,
+    "fields": {
+        "dataset_session": 2,
+        "actual_execution_time": "00:00:12.136567",
+        "expected_execution_time": "6 10:23:30.606032",
+        "status_type": "SUCCEEDED_ISSUE"
+    }
+},
+{
+    "model": "saef.datasetsessionmetadata",
+    "pk": 3,
+    "fields": {
+        "dataset_session": 3,
+        "actual_execution_time": "00:00:19.945057",
+        "expected_execution_time": "4 06:55:47.052374",
+        "status_type": "FAILED"
+    }
+}
+]

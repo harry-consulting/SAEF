@@ -1,0 +1,71 @@
+<div class="container" >
+    <canvas id="stackbar-application" ></canvas>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+<script>
+var barChartData = {
+            labels: {{ labels|safe }},
+			datasets: [
+                {% for name, job_data in data_list %}
+                    {% if forloop.last %}
+                        {% for dataset_name, color, data in job_data %}
+                            {% if forloop.last %}
+                                {
+                                    label: "{{ dataset_name }}" ,
+                                    stack: "{{ name }}",
+                                    data: {{ data|safe }},
+                                    backgroundColor: "{{ color }}",
+                                    fill: false,
+                                }
+                            {% else %}
+                                {
+                                    label: "{{ dataset_name }}",
+                                    stack: "{{ name }}",
+                                    data: {{ data|safe }},
+                                    backgroundColor: "{{ color }}",
+                                    fill: false,
+                                },
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        {% for dataset_name, color, data in job_data %}
+                            {
+                                label: "{{ dataset_name }}",
+                                stack: "{{ name }}",
+                                data: {{ data|safe }},
+                                backgroundColor: "{{ color }}",
+                                fill: false,
+                            },
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            ]
+        };
+
+        var ctx = document.getElementById('stackbar-application').getContext('2d');
+		window.stackbar = new Chart(ctx, {
+				type: 'horizontalBar',
+				data: barChartData,
+				options: {
+					title: {
+						display: true,
+						text: 'Sum'
+					},
+					tooltips: {
+						mode: 'index',
+						intersect: false
+					},
+					responsive: true,
+					scales: {
+						xAxes: [{
+							stacked: true,
+						}],
+						yAxes: [{
+							stacked: true
+						}]
+					}
+				}
+		});
+</script>

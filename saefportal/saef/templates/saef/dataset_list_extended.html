@@ -1,0 +1,59 @@
+{% load static %}
+{% extends "main/manage.html" %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'saef/style.css' %}">
+
+<h1>{{ dataset.dataset_name }}</h1>
+<ul>
+    <li>Application: {{ dataset.application }}</li>
+    <li>Name: {{ dataset.dataset_name }}</li>
+    <li>Type: {{ dataset.dataset_type }}</li>
+    <li>Job Unit: {{ dataset.job_unit_name }}</li>
+    <li>Job Flow: {{ dataset.job_flow_name }}</li>
+    <li>Create TIme: {{ dataset.create_timestamp }}</li>
+</ul>
+
+{% if dataset_columns %}
+    <ul>
+    {% for column in dataset_columns %}
+        <li> Colum Name {{ column.column_name }}</li>
+        <li> Data Type {{ column.data_type }}</li>
+        <li> Nullable {{ column.isnull }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No columns are available.</p>
+{% endif %}
+
+{% if dataset_constraints %}
+    <ul>
+    {% for column in dataset_constraints %}
+        <li> Colums {{ column.columns }}</li>
+        <li> Constraint Type {{ column.constraint_type }}</li>
+        <li> Definition {{ column.constraint_definition }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No columns are available.</p>
+{% endif %}
+
+
+
+{% block mainsection1 %} 
+<h2>Manage Connections</h2>
+<div class= 'crud_menu'>
+    <form method="POST" >
+        <input type="button" onclick= "location.href='/saef/connection/add/';"  name="Operation" value="Add Connection" />
+        {% if connections %}
+            <ul>
+                {% for connection in connections %}
+                    <li> <a href="/saef/connection/{{connection.id}}/">{{ connection.name }}</a> </li>
+                {% endfor %}
+            </ul>
+        {% else %}    
+            <p> There is no connection added yet. </p>
+        {% endif%}
+    </form>
+</div>
+{% endblock %}
+

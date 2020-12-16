@@ -1,0 +1,13 @@
+[
+  {
+    "model": "saef.application",
+    "pk": 2,
+    "fields": {
+      "application_token": 1,
+      "name": "AdventureWorks",
+      "description": "Application for AdventureWorks data",
+      "application_key": "04d0e89e-b70d-4689-9d40-f0e8fbc16811",
+      "create_timestamp": "2020-03-17T20:20:50.961Z"
+    }
+  }
+]

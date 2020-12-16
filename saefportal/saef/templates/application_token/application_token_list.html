@@ -1,0 +1,22 @@
+{% extends "main/manage.html" %}
+
+{% block mainsection1 %} 
+<div class="card"> 
+    <h2>Manage Application Tokens</h2>
+    <div class= 'crud_menu'>
+        <form method="POST" >
+            <input type="button" onclick= "location.href='/saef/application_token/add/';"  name="Operation" value="Add Application Token" />
+            {% if application_tokens %}
+                <ul>
+                    {% for applicationtoken in application_tokens %}
+                        <li> <a href="/saef/application_token/{{applicationtoken.id}}/">{{ applicationtoken.name }}</a>; Token: {{applicationtoken.application_token}} </li>
+                    {% endfor %}
+                </ul>
+            {% else %}    
+                <p> There is no application token. </p>
+            {% endif%}
+        </form>
+    </div>
+</div>
+{% endblock %}
+

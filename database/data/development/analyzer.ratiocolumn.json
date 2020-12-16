@@ -1,0 +1,134 @@
+[
+{
+    "model": "analyzer.ratiocolumn",
+    "pk": 1,
+    "fields": {
+        "dataset_ratio": 1,
+        "name": "column_order_ratio",
+        "changes": false,
+        "columns": "[]",
+        "ratio": 0.0
+    }
+},
+{
+    "model": "analyzer.ratiocolumn",
+    "pk": 2,
+    "fields": {
+        "dataset_ratio": 1,
+        "name": "column_deleted_ratio",
+        "changes": false,
+        "columns": "[]",
+        "ratio": 0.0
+    }
+},
+{
+    "model": "analyzer.ratiocolumn",
+    "pk": 3,
+    "fields": {
+        "dataset_ratio": 1,
+        "name": "column_added_ratio",
+        "changes": true,
+        "columns": "[\"id\", \"name\", \"description\", \"create_timestamp\", \"application_id\"]",
+        "ratio": 1.0
+    }
+},
+{
+    "model": "analyzer.ratiocolumn",
+    "pk": 4,
+    "fields": {
+        "dataset_ratio": 1,
+        "name": "column_datatype_ratio",
+        "changes": false,
+        "columns": "[]",
+        "ratio": 0.0
+    }
+},
+{
+    "model": "analyzer.ratiocolumn",
+    "pk": 5,
+    "fields": {
+        "dataset_ratio": 2,
+        "name": "column_order_ratio",
+        "changes": false,
+        "columns": "[]",
+        "ratio": 0.0
+    }
+},
+{
+    "model": "analyzer.ratiocolumn",
+    "pk": 6,
+    "fields": {
+        "dataset_ratio": 2,
+        "name": "column_deleted_ratio",
+        "changes": false,
+        "columns": "[]",
+        "ratio": 0.0
+    }
+},
+{
+    "model": "analyzer.ratiocolumn",
+    "pk": 7,
+    "fields": {
+        "dataset_ratio": 2,
+        "name": "column_added_ratio",
+        "changes": false,
+        "columns": "[]",
+        "ratio": 0.0
+    }
+},
+{
+    "model": "analyzer.ratiocolumn",
+    "pk": 8,
+    "fields": {
+        "dataset_ratio": 2,
+        "name": "column_datatype_ratio",
+        "changes": false,
+        "columns": "[]",
+        "ratio": 0.0
+    }
+},
+{
+    "model": "analyzer.ratiocolumn",
+    "pk": 9,
+    "fields": {
+        "dataset_ratio": 3,
+        "name": "column_order_ratio",
+        "changes": false,
+        "columns": "[]",
+        "ratio": 0.0
+    }
+},
+{
+    "model": "analyzer.ratiocolumn",
+    "pk": 10,
+    "fields": {
+        "dataset_ratio": 3,
+        "name": "column_deleted_ratio",
+        "changes": false,
+        "columns": "[]",
+        "ratio": 0.0
+    }
+},
+{
+    "model": "analyzer.ratiocolumn",
+    "pk": 11,
+    "fields": {
+        "dataset_ratio": 3,
+        "name": "column_added_ratio",
+        "changes": false,
+        "columns": "[]",
+        "ratio": 0.0
+    }
+},
+{
+    "model": "analyzer.ratiocolumn",
+    "pk": 12,
+    "fields": {
+        "dataset_ratio": 3,
+        "name": "column_datatype_ratio",
+        "changes": false,
+        "columns": "[]",
+        "ratio": 0.0
+    }
+}
+]

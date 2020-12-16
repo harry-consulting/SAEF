@@ -1,0 +1,10 @@
+.ggl-tooltip {
+    border: 1px solid #E0E0E0;
+    font-family: Arial, Helvetica;
+    padding: 6px 6px 6px 6px;
+    width: 15em;
+  }
+  
+  .ggl-tooltip span {
+    font-weight: bold;
+  }

@@ -1,0 +1,32 @@
+[
+{
+    "model": "analyzer.expecteddatasetprofile",
+    "pk": 1,
+    "fields": {
+        "actual_dataset_profile": 1,
+        "row_count": 4.0,
+        "column_count": 5.0,
+        "hash_sum": 61048.0
+    }
+},
+{
+    "model": "analyzer.expecteddatasetprofile",
+    "pk": 2,
+    "fields": {
+        "actual_dataset_profile": 2,
+        "row_count": 4.0,
+        "column_count": 5.0,
+        "hash_sum": 61048.0
+    }
+},
+{
+    "model": "analyzer.expecteddatasetprofile",
+    "pk": 3,
+    "fields": {
+        "actual_dataset_profile": 3,
+        "row_count": 4.0,
+        "column_count": 5.0,
+        "hash_sum": 61048.0
+    }
+}
+]

@@ -1,0 +1,32 @@
+[
+{
+    "model": "saef.jobsessionmetadata",
+    "pk": 1,
+    "fields": {
+        "job_session": 1,
+        "actual_execution_time": "20:46:49.075498",
+        "expected_execution_time": "20:46:49.075498",
+        "status_type": "SUCCEEDED"
+    }
+},
+{
+    "model": "saef.jobsessionmetadata",
+    "pk": 2,
+    "fields": {
+        "job_session": 3,
+        "actual_execution_time": "10:00:12.136567",
+        "expected_execution_time": "10:23:30.606032",
+        "status_type": "SUCCEEDED_ISSUE"
+    }
+},
+{
+    "model": "saef.jobsessionmetadata",
+    "pk": 3,
+    "fields": {
+        "job_session": 5,
+        "actual_execution_time": "00:19.945057",
+        "expected_execution_time": "06:55:47.052374",
+        "status_type": "FAILED"
+    }
+}
+]

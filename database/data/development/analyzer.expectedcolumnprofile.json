@@ -1,0 +1,152 @@
+[
+{
+    "model": "analyzer.expectedcolumnprofile",
+    "pk": 1,
+    "fields": {
+        "dataset_profile": 2,
+        "name": "id",
+        "min": "1.0",
+        "max": "5.0",
+        "uniqueness": 1.0,
+        "datatype": "integer",
+        "nullable": true,
+        "order": 0,
+        "hash_sum": 7136.0
+    }
+},
+{
+    "model": "analyzer.expectedcolumnprofile",
+    "pk": 2,
+    "fields": {
+        "dataset_profile": 2,
+        "name": "name",
+        "min": null,
+        "max": null,
+        "uniqueness": 1.0,
+        "datatype": "character varying",
+        "nullable": true,
+        "order": 1,
+        "hash_sum": 8912.0
+    }
+},
+{
+    "model": "analyzer.expectedcolumnprofile",
+    "pk": 3,
+    "fields": {
+        "dataset_profile": 2,
+        "name": "description",
+        "min": null,
+        "max": null,
+        "uniqueness": 1.0,
+        "datatype": "character varying",
+        "nullable": true,
+        "order": 2,
+        "hash_sum": 8913.0
+    }
+},
+{
+    "model": "analyzer.expectedcolumnprofile",
+    "pk": 4,
+    "fields": {
+        "dataset_profile": 2,
+        "name": "create_timestamp",
+        "min": "2020-04-23 23:13:59.440000+02:00",
+        "max": "2020-05-30 14:51:55.485000+02:00",
+        "uniqueness": 1.0,
+        "datatype": "timestamp with time zone",
+        "nullable": true,
+        "order": 3,
+        "hash_sum": 12094.0
+    }
+},
+{
+    "model": "analyzer.expectedcolumnprofile",
+    "pk": 5,
+    "fields": {
+        "dataset_profile": 2,
+        "name": "application_id",
+        "min": "2.0",
+        "max": "20.0",
+        "uniqueness": 0.5,
+        "datatype": "integer",
+        "nullable": true,
+        "order": 4,
+        "hash_sum": 7190.0
+    }
+},
+{
+    "model": "analyzer.expectedcolumnprofile",
+    "pk": 6,
+    "fields": {
+        "dataset_profile": 3,
+        "name": "id",
+        "min": "1.0",
+        "max": "5.0",
+        "uniqueness": 1.0,
+        "datatype": "integer",
+        "nullable": true,
+        "order": 0,
+        "hash_sum": 7136.0
+    }
+},
+{
+    "model": "analyzer.expectedcolumnprofile",
+    "pk": 7,
+    "fields": {
+        "dataset_profile": 3,
+        "name": "name",
+        "min": null,
+        "max": null,
+        "uniqueness": 1.0,
+        "datatype": "character varying",
+        "nullable": true,
+        "order": 1,
+        "hash_sum": 8912.0
+    }
+},
+{
+    "model": "analyzer.expectedcolumnprofile",
+    "pk": 8,
+    "fields": {
+        "dataset_profile": 3,
+        "name": "description",
+        "min": null,
+        "max": null,
+        "uniqueness": 1.0,
+        "datatype": "character varying",
+        "nullable": true,
+        "order": 2,
+        "hash_sum": 8913.0
+    }
+},
+{
+    "model": "analyzer.expectedcolumnprofile",
+    "pk": 9,
+    "fields": {
+        "dataset_profile": 3,
+        "name": "create_timestamp",
+        "min": "2020-04-23 23:13:59.440000+02:00",
+        "max": "2020-05-30 14:51:55.485000+02:00",
+        "uniqueness": 1.0,
+        "datatype": "timestamp with time zone",
+        "nullable": true,
+        "order": 3,
+        "hash_sum": 12094.0
+    }
+},
+{
+    "model": "analyzer.expectedcolumnprofile",
+    "pk": 10,
+    "fields": {
+        "dataset_profile": 3,
+        "name": "application_id",
+        "min": "2.0",
+        "max": "20.0",
+        "uniqueness": 0.5,
+        "datatype": "integer",
+        "nullable": true,
+        "order": 4,
+        "hash_sum": 7190.0
+    }
+}
+]

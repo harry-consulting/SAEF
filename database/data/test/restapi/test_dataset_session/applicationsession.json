@@ -1,0 +1,13 @@
+[
+{
+    "model": "saef.applicationsession",
+    "pk": 1,
+    "fields": {
+        "application": 2,
+        "create_timestamp": "2020-07-30T10:45:33.905Z",
+        "execution_id": "e011f01f-efc1-4ff9-96b8-b30699989551",
+        "status_time": "2020-02-20T20:20:00Z",
+        "status_type": "START"
+    }
+  }
+]

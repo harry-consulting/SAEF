@@ -1,0 +1,22 @@
+{% extends "main/manage.html" %}
+
+{% block mainsection1 %} 
+<div class="card"> 
+    <h2>Manage Connections</h2>
+    <div class= 'crud_menu'>
+        <form method="POST" >
+            <input type="button" onclick= "location.href='/saef/connection/add/';"  name="Operation" value="Add Connection" />
+            {% if connections %}
+                <ul>
+                    {% for connection in connections %}
+                        <li> <a href="/saef/connection/{{connection.id}}/">{{ connection.name }}</a> </li>
+                    {% endfor %}
+                </ul>
+            {% else %}    
+                <p> There is no connection added yet. </p>
+            {% endif%}
+        </form>
+    </div>
+</div>
+{% endblock %}
+

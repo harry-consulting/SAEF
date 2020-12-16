@@ -1,0 +1,11 @@
+[
+  {
+    "model": "saef.connection",
+    "pk": 1,
+    "fields": {
+      "name": "AdventureWorksSample",
+      "time_out": 120,
+      "connection_type": 2
+    }
+  }
+]

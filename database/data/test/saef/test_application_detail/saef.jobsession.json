@@ -1,0 +1,62 @@
+[
+  {
+    "model": "saef.jobsession",
+    "pk": 1,
+    "fields": {
+      "application_session": 1,
+      "job": 1,
+      "create_timestamp": "2020-07-30T10:45:33.905Z",
+      "execution_id": "b1b63457-9c0a-4ff3-b09b-3e3ea4a4c321",
+      "status_time": "2020-02-20T20:20:00Z",
+      "status_type": "START"
+    }
+  },
+  {
+    "model": "saef.jobsession",
+    "pk": 3,
+    "fields": {
+      "application_session": 1,
+      "job": 1,
+      "create_timestamp": "2020-08-12T07:33:46.680Z",
+      "execution_id": "a186ce41-8c4e-47fc-9355-9952551f6454",
+      "status_time": "2020-02-20T20:20:00Z",
+      "status_type": "START"
+    }
+  },
+  {
+    "model": "saef.jobsession",
+    "pk": 4,
+    "fields": {
+      "application_session": 1,
+      "job": 1,
+      "create_timestamp": "2020-08-12T07:33:58.816Z",
+      "execution_id": "a186ce41-8c4e-47fc-9355-9952551f6454",
+      "status_time": "2020-02-20T20:20:00Z",
+      "status_type": "END"
+    }
+  },
+  {
+    "model": "saef.jobsession",
+    "pk": 5,
+    "fields": {
+      "application_session": 1,
+      "job": 1,
+      "create_timestamp": "2020-08-12T08:28:05.634Z",
+      "execution_id": "49a3105f-f104-4583-a287-5faac6e9c9d0",
+      "status_time": "2020-02-20T20:20:00Z",
+      "status_type": "START"
+    }
+  },
+  {
+    "model": "saef.jobsession",
+    "pk": 6,
+    "fields": {
+      "application_session": 1,
+      "job": 1,
+      "create_timestamp": "2020-08-12T08:28:25.579Z",
+      "execution_id": "49a3105f-f104-4583-a287-5faac6e9c9d0",
+      "status_time": "2020-02-20T20:20:00Z",
+      "status_type": "END"
+    }
+  }
+]

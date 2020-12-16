@@ -1,0 +1,14 @@
+[
+  {
+    "model": "saef.azureconnection",
+    "pk": 1,
+    "fields": {
+        "db_name": "test",
+        "username": "test",
+        "password": "test",
+        "host": "test",
+        "port": 1433,
+        "connection": 1
+    }
+  }
+]

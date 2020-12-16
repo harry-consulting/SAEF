@@ -1,0 +1,19 @@
+[
+  {
+    "model": "saef.dataset",
+    "pk": 1,
+    "fields": {
+      "connection": 2,
+      "job": 1,
+      "sequence_in_job": 2,
+      "dataset_key": "04d0e55e-b70d-4689-9d40-f0e8fbc16811",
+      "dataset_name": "Person.Person2",
+      "dataset_type": "INPUT",
+      "query_timeout": 300,
+      "dataset_access_method": "TABLE",
+      "dataset_extraction_sql": "{'Table':'Person.Person'}",
+      "dataset_extraction_table": "public.saef_job",
+      "create_timestamp": "2020-04-13T07:25:25.922Z"
+    }
+  }
+]

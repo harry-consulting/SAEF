@@ -1,0 +1,11 @@
+{
+  "user": {
+    "email": "testuser@test.com",
+    "firstname": "John",
+    "lastname": "Carlson",
+    "organization": "Aalborg Univeristy",
+    "phone": "+4512345678",
+    "password1": "secretsecret22",
+    "password2": "secretsecret22"
+  }
+}

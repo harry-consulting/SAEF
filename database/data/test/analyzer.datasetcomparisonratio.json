@@ -1,0 +1,34 @@
+[
+  {
+    "model": "analyzer.datasetcomparisonratio",
+    "pk": 1,
+    "fields": {
+      "degree_of_change": 0.6,
+      "dataset_id": 1
+    }
+  },
+  {
+    "model": "analyzer.datasetcomparisonratio",
+    "pk": 2,
+    "fields": {
+      "degree_of_change": 0.0,
+      "dataset_id": 3
+    }
+  },
+  {
+    "model": "analyzer.datasetcomparisonratio",
+    "pk": 3,
+    "fields": {
+      "degree_of_change": 0.0,
+      "dataset_id": 4
+    }
+  },
+  {
+    "model": "analyzer.datasetcomparisonratio",
+    "pk": 4,
+    "fields": {
+      "degree_of_change": 0.6,
+      "dataset_id": 5
+    }
+  }
+]

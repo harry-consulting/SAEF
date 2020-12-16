@@ -1,0 +1,195 @@
+{% extends "main/monitor.html" %} 
+{% load static %} 
+{% load charts.timeline %} 
+{% load utils %} 
+{% load dialogs.comparison_profile %} 
+{% load django_bootstrap_breadcrumbs %} 
+{% block breadcrumbs %} 
+    {{ block.super }} 
+    {% breadcrumb "Job runs" "job_session" %} 
+    {% breadcrumb metadata.session_name "job_session" %} 
+{% endblock %}
+
+{% block mainsection1 %}
+<!-- Clipboard tooltip -->
+<script
+  type="text/javascript"
+  src="{% static 'saef/js/tooltipCopy.js' %}"
+></script>
+
+<div class="card" style="overflow: auto">
+  {% if metadata %} {% if selected_comparison_result %} 
+    {% dialog_comparison_profile selected_comparison_result %} 
+  {% endif %}
+  <div class="row row-cols-2">
+    <div class="col col-lg-4">
+      <h4>Run info</h4>
+      <div class="row" style="border-bottom: 1px solid">
+        <div class="col-sm description text-secondary">
+          <b>Status</b>
+        </div>
+        <div class="col-sm result">
+          <i
+            class="{{metadata.status_type | status_icon}}"
+            style="color: {{metadata.status_type | status_color}};"
+            aria-hidden="true"
+          >
+          </i>
+          {{metadata.get_status_label}}
+        </div>
+      </div>
+      <div class="row" style="border-bottom: 1px solid">
+        <div class="col-sm description text-secondary">
+          <b>Duration</b>
+        </div>
+        <div class="col-sm result">{{metadata.actual_execution_time}}</div>
+      </div>
+      <div class="row" style="border-bottom: 1px solid">
+        <div class="col-sm description text-secondary">
+          <b>Expected</b>
+        </div>
+        <div class="col-sm result">{{metadata.expected_execution_time}}</div>
+      </div>
+      <div class="row" style="border-bottom: 1px solid">
+        <div class="col-sm description text-secondary">
+          <b>Started</b>
+        </div>
+        <div class="col-sm result">{{metadata.session_created}}</div>
+      </div>
+      <div class="row" style="border-bottom: 1px solid">
+        <div class="col-sm description text-secondary">
+          <b>Ended</b>
+        </div>
+        <div class="col-sm result">{{metadata.session_ended}}</div>
+      </div>
+      <div class="row" style="border-bottom: 1px solid">
+        <div class="col-sm description text-secondary">
+          <b>Progress</b>
+        </div>
+        <div class="col-sm result">
+          {{succeeded_datasets}} of {{total_datasets}} datasets succeeded
+        </div>
+      </div>
+      <div class="row" style="border-bottom: 1px solid">
+        <div class="col-sm description text-secondary">
+          <b>Execution ID</b>
+        </div>
+        <div class="col-sm result">
+          <p>
+            {{metadata.job_session.execution_id}}
+            <i
+              class="fa fa-clipboard"
+              aria-hidden="true"
+              style="cursor: pointer"
+              data-clipboard-text="{{metadata.job_session.execution_id}}"
+            ></i>
+          </p>
+        </div>
+      </div>
+      <h4 class="mt-4">Recent job runs</h4>
+      <div class="list-group list-group-flush">
+        {% for metadata in recent_job_sessions_metadata %}
+        <li class="list-group-item">
+          <a
+            href="{% url 'job_session' metadata.pk%}"
+            style="display: block; text-decoration: none"
+          >
+            {{metadata.job_session.create_timestamp}}
+          </a>
+        </li>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="col-8">
+      {% if dataset_sessions_metadata|length > 0 %}
+      <h4>Progress detail for dataset sessions</h4>
+      <table class="table table-sm table-striped table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">
+              <a
+                href="?{% url_append request 'order_by' 'name' '-' %}"
+                style="color: inherit"
+                >Dataset</a
+              >
+              {% sort_direction request 'name'%}
+            </th>
+            <th scope="col">
+              <a
+                href="?{% url_append request 'order_by' 'connection_type' '-' %}"
+                style="color: inherit"
+                >Connection type</a
+              >
+              {% sort_direction request 'connection_type'%}
+            </th>
+            <th scope="col">
+              <a
+                href="?{% url_append request 'order_by' 'timestamp' '-' %}"
+                style="color: inherit"
+                >Run start</a
+              >
+              {% sort_direction request 'timestamp'%}
+            </th>
+            <th scope="col">
+              <a
+                href="?{% url_append request 'order_by' 'status_type' '-' %}"
+                style="color: inherit"
+                >Status</a
+              >
+              {% sort_direction request 'status_type'%}
+            </th>
+            <th scope="col">
+              <a
+                href="?{% url_append request 'order_by' 'comparison_results' '-' %}"
+                style="color: inherit"
+                >Comparison results</a
+              >
+              {% sort_direction request 'comparison_results'%}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for metadata in dataset_sessions_metadata %}
+          <tr>
+            <td>
+              <a href="{% url 'dataset_session' metadata.pk%}">
+                {{metadata.session_name}}
+              </a>
+            </td>
+            <td>
+              {{metadata.dataset_session.dataset.connection.connection_type}}
+            </td>
+            <td>{{metadata.dataset_session.create_timestamp}}</td>
+            <td>
+              <i
+                class="{{metadata.status_type | status_icon}}"
+                style="color: {{metadata.status_type | status_color}};"
+                aria-hidden="true"
+              >
+              </i>
+              {{metadata.get_status_label}}
+            </td>
+            <td>
+              <a href="?{% url_append request 'result' metadata.id|slugify  %}"
+                >{{metadata.dataset_session.degree_of_change}}</a
+              >
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="timeline-chart mt-4" style="overflow-x: scroll">
+        {% if dataset_sessions_metadata %}
+          {% chart_timeline_sessions dataset_sessions_metadata 1 %}
+        {% endif %}
+      </div>
+      {% else %}
+      <h4>No dataset sessions found</h4>
+      {% endif %}
+    </div>
+  </div>
+  {% else %}
+  <h4>Job session not found</h4>
+  {% endif %}
+</div>
+{% endblock %}

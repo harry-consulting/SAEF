@@ -1,0 +1,42 @@
+[
+    {
+        "model": "analyzer.actualdatasetprofile",
+        "pk": 1,
+        "fields": {
+            "dataset_session": 1,
+            "row_count": 4,
+            "column_count": 5,
+            "hash_sum": 61458
+        }
+    },
+    {
+        "model": "analyzer.actualdatasetprofile",
+        "pk": 2,
+        "fields": {
+            "dataset_session": 2,
+            "row_count": 4,
+            "column_count": 5,
+            "hash_sum": 61458
+        }
+    },
+    {
+        "model": "analyzer.actualdatasetprofile",
+        "pk": 3,
+        "fields": {
+            "dataset_session": 3,
+            "row_count": 4,
+            "column_count": 5,
+            "hash_sum": 61458
+        }
+    },
+    {
+        "model": "analyzer.actualdatasetprofile",
+        "pk": 4,
+        "fields": {
+            "dataset_session": 4,
+            "row_count": 4,
+            "column_count": 5,
+            "hash_sum": 61458
+        }
+    }
+]
