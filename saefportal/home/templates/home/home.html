@@ -1,0 +1,21 @@
+{% extends "saef/base.html" %}
+
+{% load static %}
+
+{% block mainsection %}
+    <link rel="stylesheet" type="text/css" href="{% static 'home/css/home.css' %}">
+
+    <div class="container" id="home-container">
+        <div class="row link-cards">
+            {% include "home/link_cards.html" %}
+        </div>
+
+        <div class="row">
+            {% include "home/usage_charts.html" %}
+        </div>
+
+        <div class="row">
+            {% include "home/guides_changelog.html" %}
+        </div>
+    </div>
+{% endblock mainsection %}

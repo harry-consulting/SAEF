@@ -1,0 +1,38 @@
+.profile-history .fixed-head.profile-run-info, .profile-history .fixed-head.profile-run-list {
+    max-width: 375px;
+    max-height: 200px;
+}
+
+.profile-history .fixed-head.column-profile {
+    max-height: 410px;
+}
+
+.profile-history .fixed-head {
+    overflow: auto;
+    margin-bottom: 15px;
+}
+
+#profile-run-info {
+    border: 1px solid #dee2e6;
+}
+
+.tooltip {
+    pointer-events: none;
+}
+
+#copy-execution-id {
+    color: black;
+    cursor: pointer;
+}
+
+#expanded-profile-canvas {
+    max-height: 200px;
+}
+
+.container.profile-history {
+    padding: 0;
+}
+
+.col-4.profile-run-col {
+    padding-right: 0;
+}

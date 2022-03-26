@@ -1,0 +1,42 @@
+{% if query_valid %}
+    <h5>Query preview <small>(first {{ data_preview|length }} rows)</small></h5>
+    <div class="query-result-container">
+        <table class="table row-border text-nowrap compact" id="query-result-table">
+            <thead>
+            <tr>
+                {% for column_name in column_names %}
+                    <th>{{ column_name }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for row in data_preview %}
+                <tr>
+                    {% for cell in row %}
+                        <td>{{ cell }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+
+<script>
+    $(document).ready(function () {
+        $("#query-result-table").DataTable({
+            lengthChange: false,
+            paging: false,
+            searching: false,
+            info: false
+        });
+    });
+
+    // Visually show on the "Test query" button whether the query is valid or not.
+    if ("{{ query_valid }}" === "True") {
+        $("#test-query").addClass("is-valid")
+    } else if ("{{ query_valid }}" === "False") {
+        $("#test-query").addClass("is-invalid")
+    }
+</script>

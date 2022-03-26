@@ -1,0 +1,47 @@
+.modal-body input, label {
+    display: block;
+}
+
+.modal-body input {
+    margin-bottom: 10px;
+}
+
+.modal-body select {
+    margin-bottom: 10px;
+    max-width: 200px;
+}
+
+#id_name {
+    width: 180px;
+}
+
+.modal-body .container {
+    padding-left: 0;
+}
+
+.modal-body textarea {
+    max-height: 60px;
+    margin-bottom: 5px;
+}
+
+#query-collapse {
+    margin-top: 10px;
+}
+
+#test-query {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    max-width: 125px;
+}
+
+.query-result-container {
+    max-height: 200px;
+    max-width: 100%;
+    overflow: auto;
+}
+
+.query-result-container thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}

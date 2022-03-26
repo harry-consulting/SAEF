@@ -1,0 +1,9 @@
+.modal-body input[type=text] {
+    max-width: 250px!important;
+    width: 250px;
+}
+
+.modal-body input, .modal-body label {
+    display: block;
+    margin-left: 0;
+}

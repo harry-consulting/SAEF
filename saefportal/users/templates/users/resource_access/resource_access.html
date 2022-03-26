@@ -1,0 +1,64 @@
+{% extends "saef/base.html" %}
+{% load static %}
+
+{% block mainsection %}
+    <link rel="stylesheet" type="text/css" href="{% static 'users/css/resource_access.css' %}">
+
+    <div class="container-fluid" id="resource-access-container">
+        <div class="row p-2">
+            <div class="col-4">
+                <div id="incoming-outgoing-requests">
+                    {% include "users/resource_access/incoming_outgoing_requests.html" %}
+                </div>
+            </div>
+            <div class="col-7">
+                <h5 class="table-title">My permissions</h5>
+                <table class="table" id="user-permission-table">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>Permission</th>
+                        <th>Resource</th>
+                        <th>Resource type</th>
+                        <th>Permission source</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for permission, source in user_permissions %}
+                        <tr>
+                            <td>{{ permission.get_permission_string }}</td>
+                            <td>{{ permission.get_object }}</td>
+                            <td>{{ permission.content_type|title }}</td>
+                            <td>{{ source|join:", " }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <button type="button" class="btn btn-success" id="request-access">Request access</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal" data-bs-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#user-permission-table").DataTable({
+                lengthChange: false,
+                info: false,
+                dom: "ftp",
+                order: [[2, "asc"]],
+                pageLength: 10,
+                language: {searchPlaceholder: "Search permissions"},
+            });
+
+            $("#request-access").modalForm({
+                formURL: "{% url 'request_access' %}"
+            });
+        });
+    </script>
+{% endblock mainsection %}

@@ -1,0 +1,97 @@
+{% extends "datasets/dataset/create_update_dataset_base.html" %}
+
+{% block title %}Create new query dataset{% endblock title %}
+{% block submit %}Create{% endblock submit %}
+
+{% block static %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'datasets/css/dataset/create_update_query_dataset.css' %}">
+{% endblock static %}
+
+{% block extra_fields %}
+    <div class="row mt-3">
+        <div class="col">
+            <label for="{{ form.connection.id_for_label }}">{{ form.connection.label }}</label>
+            {{ form.connection }}
+        </div>
+        <div class="col">
+            <div id="dataset-select-container">
+                {% include "datasets/dataset/dataset_select.html" with select_multiple=False %}
+            </div>
+        </div>
+    </div>
+
+    {# Invisible field used to record the file id of the currently selected dataset shown in the query.#}
+    {{ form.file_id }}
+{% endblock extra_fields %}
+
+{% block collapse %}
+    <div class="collapse" id="query-collapse">
+        <label for="{{ form.query.id_for_label }}">{{ form.query.label }}</label>
+        {{ form.query }}
+
+        <button type="button" class="btn btn-primary form-control" id="test-query">
+            Test query
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none"
+                  id="test-query-spinner"></span>
+        </button>
+
+        <div class="collapse" id="query-result-collapse">
+            {% include "datasets/dataset/query_result.html" %}
+        </div>
+    </div>
+{% endblock collapse %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        // If the connection is already set due to a validation error, reset the connection select and query input.
+        if ($("#id_connection").val()) {
+            $("#id_connection").val("")
+            $("#id_query").val("")
+        }
+
+        // Set the default owner to the current user.
+        $("#id_owner").val("{{ user.id }}")
+
+        $("#dataset-select").prop('disabled', true);
+        $("#dataset-select").selectpicker('refresh');
+
+        // When a connection is selected, show the text input for queries and the button to test the query.
+        $("#{{ form.connection.id_for_label }}").on("change", function () {
+            var selectedConnection = this.value
+
+            if (selectedConnection) {
+                $("#query-collapse").collapse("show")
+            } else {
+                $("#query-collapse").collapse("hide")
+            }
+        })
+
+        // When the "Test query" button is clicked, make an ajax request to retrieve the data, populate the table and show.
+        $("#test-query").on("click", function () {
+            $("#test-query-spinner").show()
+            $("#test-query").removeClass("is-valid").removeClass("is-invalid")
+
+            var connectionId = $("#{{ form.connection.id_for_label }}").val()
+            var query = $("#id_query").val()
+
+            // If it is a file datastore, replace the path in the query with the ID that can be used to get the file.
+            var selectedDataset = $("#dataset-select").val()
+            if (selectedDataset.startsWith("Files.")) {
+                var datasetInfo = JSON.parse(selectedDataset.replace("Files.", ""))
+                query = query.replace(`\`${datasetInfo["name"]}\``, `\`${datasetInfo["id"]}\``)
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'datasets:query_preview' %}",
+                data: {"connection_id": connectionId, "query": query, "csrfmiddlewaretoken": "{{ csrf_token }}"},
+                success: function (result) {
+                    $("#query-result-collapse").html(result)
+                    $("#query-result-collapse").collapse("show")
+                    $("#test-query-spinner").hide()
+                }
+            });
+        })
+    </script>
+{% endblock javascript %}

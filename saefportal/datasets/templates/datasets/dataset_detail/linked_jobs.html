@@ -1,0 +1,51 @@
+<div class="accordion-item">
+    <h2 class="accordion-header" id="linked-jobs-heading">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#linked-jobs-collapse"
+                aria-expanded="true" aria-controls="linked-jobs-collapse">
+            Linked Jobs <span class="badge rounded-pill bg-dark">{{ dataset.get_linked_jobs|length }}</span>
+        </button>
+    </h2>
+    <div id="linked-jobs-collapse" class="accordion-collapse collapse" aria-labelledby="linked-jobs-heading">
+        <div class="accordion-body dataset-detail">
+            {% with dataset.get_linked_jobs as linked_jobs %}
+                {% if linked_jobs %}
+                    <table class="table row-border" id="linked-jobs-table">
+                        <thead class="table-dark">
+                        <tr>
+                            <th>Job name</th>
+                            <th>Task</th>
+                            <th>Trigger</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for job in linked_jobs %}
+                            <tr>
+                                <td><a href="{% url 'jobs:index' %}?job={{ job.id }}">{{ job.name }}</a></td>
+                                <td>{{ job.get_task.2 }}</td>
+                                <td>{{ job.get_readable_cron.1 }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    The dataset is not linked to any jobs.
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#linked-jobs-table").DataTable({
+            lengthChange: false,
+            dom: "ftip",
+            pageLength: 5,
+            language: {
+                searchPlaceholder: "Search linked jobs"
+            }
+        });
+    });
+</script>

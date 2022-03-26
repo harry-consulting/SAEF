@@ -1,0 +1,7 @@
+.modal-body .bootstrap-select {
+    max-width: 200px;
+}
+
+.modal-body label {
+    margin-bottom: 5px;
+}

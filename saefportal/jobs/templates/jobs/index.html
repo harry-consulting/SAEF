@@ -1,0 +1,143 @@
+{% extends "saef/base.html" %}
+
+{% load static %}
+
+{% block mainsection %}
+    <link rel="stylesheet" type="text/css" href="{% static 'jobs/css/index.css' %}">
+
+    <div class="p-2">
+        <div id="create-job-container"></div>
+
+        {% if jobs %}
+            <table class="table row-border" id="job-table">
+                <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Task</th>
+                    <th>Trigger</th>
+                    <th>Last run</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for job in jobs %}
+                    <tr class="row-{{ job.id }}">
+                        <td>{{ job.name }}</td>
+                        <td>{{ job.get_task.2 }}</td>
+                        <td>{{ job.get_readable_cron.1 }}</td>
+                        <td>
+                            {% with job.get_last_job_run as last_job_run %}
+                                {% if last_job_run %}
+                                    {{ last_job_run.get_status_icon|safe }} {{ last_job_run.end_datetime }}
+                                {% endif %}
+                            {% endwith %}
+                        </td>
+                        <td style="max-width: 70px">
+                            <div class="container">
+                                <div class="row">
+                                    {% with user.get_grouped_permission_ids as permissions %}
+                                        <div class="col-sm">
+                                            {% if job.id in permissions.job.level_1 or job.id in permissions.job.level_2 %}
+                                                <i class="fas fa-book read-run-history general-blue-hover"
+                                                   data-form-url="{% url 'jobs:run_history' job.id %}"></i>
+                                            {% else %}
+                                                <i class="fas fa-book request-read-run-history general-blue-hover"
+                                                   data-form-url="{% url 'request_access' 'job' job.id 1 %}"></i>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-sm">
+                                            <i class="fas fa-play trigger-job success-green-hover"
+                                               data-form-url="{% url 'jobs:trigger' job.id %}"></i>
+                                        </div>
+                                        <div class="col-sm">
+                                            <i class="fas fa-cog update-job general-blue-hover"
+                                               data-form-url="{% url 'jobs:update' job.id %}"></i>
+                                        </div>
+                                        <div class="col-sm">
+                                            {% if job.id in permissions.job.level_2 %}
+                                                <a href="{% url 'jobs:delete' job.id %}"
+                                                   onclick="return confirm('Are you sure?');">
+                                                    <i class="fas fa-trash delete warning-red-hover"></i>
+                                                </a>
+                                            {% else %}
+                                                <i class="fas fa-trash delete request-delete-job warning-red-hover"
+                                                   data-form-url="{% url 'request_access' 'job' job.id 2 %}"></i>
+                                            {% endif %}
+                                        </div>
+                                    {% endwith %}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        {% else %}
+            <p>No jobs are available.</p>
+        {% endif %}
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal" data-bs-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content"></div>
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="run-history-modal" data-bs-backdrop="static">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        // If the referrer was the manage page then highlight the job specified in the query parameters.
+        if (document.referrer.includes("{% url 'datasets:index' %}")) {
+
+            var urlSearchParams = new URLSearchParams(window.location.search);
+            var params = Object.fromEntries(urlSearchParams.entries());
+
+            $(`.row-${params.job}`).effect("highlight", {color: "#3083ff"}, 3000)
+        }
+
+        $(document).ready(function () {
+            $("#job-table").DataTable({
+                columnDefs: [
+                    {orderable: false, targets: 4}
+                ],
+                lengthChange: false,
+                dom: "ftip",
+                order: [[3, "desc"]],
+                pageLength: 10,
+                language: {
+                    searchPlaceholder: "Search jobs"
+                }
+            });
+
+            // Place "Create job" icon after datatable generated search bar if possible.
+            if ($("#job-table_filter").length) {
+                $("#job-table_filter").after('<i class="fa fa-plus create general-blue-hover" id="create-job"></i>')
+            } else {
+                $("#create-job-container").append('<i class="fa fa-plus create general-blue-hover" id="create-job"></i>')
+            }
+
+            $("#create-job").modalForm({
+                formURL: "{% url 'jobs:create' %}"
+            });
+
+            $(".update-job, .trigger-job, .request-delete-job, .request-read-run-history").each(function () {
+                $(this).modalForm({
+                    formURL: $(this).data("form-url"),
+                });
+            });
+
+            $(".read-run-history").each(function () {
+                $(this).modalForm({
+                    modalID: "#run-history-modal",
+                    formURL: $(this).data("form-url"),
+                });
+            });
+        });
+    </script>
+{% endblock mainsection %}
+

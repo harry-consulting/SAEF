@@ -1,0 +1,18 @@
+<h5>Profile dataset</h5>
+<div class="profile-task-fields">
+    <label for={{ form.profile_expected_datasets_n.id_for_label }}>{{ form.profile_expected_datasets_n.label }}</label>
+    <i tabindex="0" data-bs-trigger="focus" class="fas fa-info-circle" data-bs-toggle="popover"
+       data-bs-content="How many previous profile runs to use when creating the expected dataset."></i>
+    {{ form.profile_expected_datasets_n }}
+
+    <label for={{ form.profile_failed_threshold.id_for_label }}>{{ form.profile_failed_threshold.label }}</label>
+    <i tabindex="0" data-bs-trigger="focus" class="fas fa-info-circle" data-bs-toggle="popover"
+       data-bs-content="If the actual degree of change is above this threshold, the profile run fails."></i>
+    {{ form.profile_failed_threshold }}
+
+    <label for={{ form.profile_delta_deviation.id_for_label }}>{{ form.profile_delta_deviation.label }}</label>
+    <i tabindex="0" data-bs-trigger="focus" class="fas fa-info-circle" data-bs-toggle="popover"
+       data-bs-content="Scales the expected degree of change to set a threshold. If the actual degree of change is
+       above this threshold, the profile run succeeds with issues."></i>
+    {{ form.profile_delta_deviation }}
+</div>

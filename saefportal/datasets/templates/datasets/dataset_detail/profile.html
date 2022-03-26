@@ -1,0 +1,89 @@
+<div class="accordion-item">
+    <h2 class="accordion-header" id="profile-heading">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#profile-collapse"
+                aria-expanded="true" aria-controls="profile-collapse">
+            Profile
+        </button>
+    </h2>
+    <div id="profile-collapse" class="accordion-collapse collapse" aria-labelledby="profile-heading">
+        <div class="accordion-body dataset-detail">
+
+            {% with dataset.get_profile_runs as profile_runs %}
+                {% if profile_runs %}
+                    <div class="container-fluid">
+                        <div class="row">
+
+                            <div class="col-auto profile info" style="width: 25%">
+                                <table class="table text-nowrap" id="general-profile-info">
+                                    <tr>
+                                        <th scope="row" style="width: 12%" class="text-right">Number of profiles:
+                                        </th>
+                                        <td>{{ profile_runs|length }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" style="width: 12%" class="text-right">First profile:</th>
+                                        <td>{{ profile_runs.last.start_datetime }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" style="width: 12%" class="text-right">Latest profile:</th>
+                                        <td>{{ profile_runs.0.start_datetime }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" style="width: 12%" class="text-right">Latest status:</th>
+                                        <td>{{ profile_runs.0.get_status_display }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="col-auto" style="width: 70%">
+                                <div class="card">
+                                    <canvas id="profile-canvas"></canvas>
+                                    <button type="button" class="btn btn-outline-primary btn-sm reset-chart"
+                                            id="reset-chart-btn">
+                                        Reset
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="col-auto">
+                                <i class="fas fa-expand-arrows-alt expand-profile general-blue-hover"
+                                   id="read-profile-history"></i>
+                            </div>
+
+                        </div>
+                    </div>
+                {% else %}
+                    No profile runs are available.
+                {% endif %}
+            {% endwith %}
+
+            <div class="modal fade" tabindex="-1" role="dialog" id="profile-history-modal" data-bs-backdrop="static">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content" id="profile-history-modal-content"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+    if ($("#profile-canvas").length) {
+        var chartData = JSON.parse("{{ dataset.get_degree_of_change_data|safe }}".replaceAll("'", "\""))
+        var chart = degreeOfChangeChart($("#profile-canvas")[0], chartData)
+
+        $("#reset-chart-btn").on("click", function () {
+            chart.resetZoom()
+        })
+    }
+
+    // Connect the "expand" icon with the modal that shows the profile history.
+    $(document).ready(function () {
+        $("#read-profile-history").modalForm({
+            modalID: "#profile-history-modal",
+            formURL: "{% url 'datasets:profile_history' dataset.id %}"
+        });
+    });
+</script>

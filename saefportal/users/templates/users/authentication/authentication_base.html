@@ -1,0 +1,47 @@
+{% extends "saef/base.html" %}
+{% load static %}
+
+{% block mainsection %}
+    <link rel="stylesheet" type="text/css" href="{% static 'users/css/users.css' %}">
+
+    <div class="d-flex flex-column min-vh-100 justify-content-center align-items-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
+                    <div class="card text-white" style="background-color: #11101d">
+                        <div class="card-body p-5">
+                            <h3 class="text-center">{% block title %}{% endblock title %}</h3>
+
+                            <form method="POST">
+                                {% csrf_token %}
+                                {% if form.non_field_errors %}
+                                    <ul class="form-errors p-0" style="list-style-type: none; color: red">
+                                        {% for error in form.non_field_errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+
+                                {% block form_fields %}
+                                    {% for field in form %}
+                                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                        {{ field }}
+                                    {% endfor %}
+                                {% endblock form_fields %}
+
+                                {% block form_submit %}{% endblock form_submit %}
+                            </form>
+
+                            {% block redirect %}{% endblock redirect %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        // Adding the form-control class to all inputs for cleaning up the form look.
+        $("input").addClass("form-control")
+    </script>
+{% endblock mainsection %}

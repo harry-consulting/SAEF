@@ -1,0 +1,50 @@
+.link-cards .card-body {
+    padding: 10px 0 0;
+}
+
+.card-icon {
+    padding: 30px 10px;
+    font-size: 50px;
+}
+
+.card-title {
+    margin-bottom: 5px;
+}
+
+#home-container .row {
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+
+ul {
+    margin-bottom: 5px;
+}
+
+h6 {
+    margin-bottom: 4px;
+}
+
+.accordion-body {
+    padding: 10px 10px 10px 20px;
+}
+
+.card-img-left {
+    width: 100px;
+    height: auto;
+}
+
+.card.guide {
+    margin-bottom: 15px;
+}
+
+.time-frame-select {
+    top: 0;
+    right: 0;
+    position: absolute;
+    height: 32px;
+    padding-top: 3px;
+}
+
+.card.usage-chart {
+    max-height: 300px;
+}

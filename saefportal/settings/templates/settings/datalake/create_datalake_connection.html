@@ -1,0 +1,20 @@
+{% extends "settings/datalake/create_update_datalake_connection_base.html" %}
+
+{% block title %}Connect to datalake{% endblock title %}
+{% block submit %}Connect{% endblock submit %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var kwargs = JSON.parse("{{ view.kwargs|safe }}".replaceAll("'", "\""))
+
+            // If the modal is opened from the user getting denied access to an action, alert the user.
+            if (!$.isEmptyObject(kwargs)) {
+                $("#alert-container").html('<div class="alert alert-warning" role="alert">This action requires a datalake. You can create a datalake connection here.</div>')
+
+                // Also change the action of the form so the form posts to the correct URL.
+                $("#datalake-form").attr("action", `/settings/create_datalake_connection/${kwargs["redirect"]}/`)
+            }
+        });
+    </script>
+{% endblock javascript %}

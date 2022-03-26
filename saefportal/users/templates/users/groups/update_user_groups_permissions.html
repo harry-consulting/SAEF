@@ -1,0 +1,51 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'users/css/update_user_groups_permissions.css' %}">
+
+<form method="post" action="">
+    {% csrf_token %}
+
+    <div class="modal-header">
+        <h6 class="modal-title">Update groups/permissions for {{ user }}</h6>
+    </div>
+
+    <div class="modal-body">
+        <div class="container">
+            <div class="row mb-0">
+                <div class="form-group col">
+                    <div class="d-flex flex-column">
+                        <label for="{{ form.organization_groups.id_for_label }}">Groups</label>
+                        {{ form.organization_groups }}
+                    </div>
+                </div>
+                <div class="form-group col">
+                    <div class="d-flex flex-column">
+                        <label for="permission-select">Permissions</label>
+                            <select class="selectpicker" id="permission-select" name="permission-select" multiple>
+                                {% for group_name, group_permissions in grouped_permissions.items %}
+                                    <optgroup label="{{ group_name|title }}">
+                                        {% for permission in group_permissions %}
+                                            <option value="{{ permission.id }}" {% if permission.id in initial_permissions %}selected{% endif %}>
+                                                {{ permission }}
+                                            </option>
+                                        {% endfor %}
+                                    </optgroup>
+                                {% endfor %}
+                            </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Update</button>
+    </div>
+</form>
+
+<script type="text/javascript">
+    // Setup up bootstrap-select multiselect for the organization groups and object permissions selects.
+    $("#id_organization_groups, .selectpicker").selectpicker({
+        liveSearch: true
+    });
+</script>

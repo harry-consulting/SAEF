@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class Column(Enum):
     TYPE = 0
     NULLABLE = 1

@@ -1,0 +1,30 @@
+{% for notification in read_notifications reversed %}
+    <li class="notification-item">
+        <a class="stretched-link" href={{ notification.data.url }}>
+            <b>{{ notification.actor }}</b> {{ notification.verb }}
+            {% if notification.action_object %}<b>{{ notification.action_object }}</b>{% endif %}
+            {{ notification.timesince }} ago
+        </a>
+    </li>
+
+    {% if not forloop.last %}
+        <div class="dropdown-divider"></div>
+    {% endif %}
+{% endfor %}
+
+{% if notifications %}
+    <li><h6 class="dropdown-header">Unread</h6></li>
+{% endif %}
+{% for notification in notifications reversed %}
+    <li class="notification-item">
+        <a class="stretched-link" href={{ notification.data.url }}>
+            <b>{{ notification.actor }}</b> {{ notification.verb }}
+            {% if notification.action_object %}<b>{{ notification.action_object }}</b>{% endif %}
+            {{ notification.timesince }} ago
+        </a>
+    </li>
+
+    {% if not forloop.last %}
+        <div class="dropdown-divider"></div>
+    {% endif %}
+{% endfor %}

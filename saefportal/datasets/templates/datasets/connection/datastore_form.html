@@ -1,0 +1,12 @@
+<div class="container pt-2">
+    {% for group in form.get_grouped_fields %}
+        <div class="row">
+            {% for field in group %}
+                <div class="col ps-0">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>

@@ -1,0 +1,106 @@
+<div class="accordion-item">
+    <h2 class="accordion-header" id="notes-heading">
+        <button class="accordion-button {% if not ajax %}collapsed{% endif %}" type="button" data-bs-toggle="collapse"
+                data-bs-target="#notes-collapse"
+                aria-expanded="true" aria-controls="notes-collapse">
+            Notes <span class="badge rounded-pill bg-dark">{{ dataset.get_notes|length }}</span>
+        </button>
+    </h2>
+    <div id="notes-collapse" class="accordion-collapse collapse {% if ajax %}show{% endif %}"
+         aria-labelledby="notes-heading">
+        <div class="accordion-body dataset-detail">
+
+            <table class="table row-border" id="notes-table">
+                <thead>
+                <tr>
+                    <th>Note</th>
+                    <th>Created by</th>
+                    <th>Created at</th>
+                    <th id="notes-action"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for note in dataset.get_notes %}
+                    <tr>
+                        <td>{{ note.text }}</td>
+                        <td>{{ note.created_by }}</td>
+                        <td>{{ note.updated_at }}</td>
+                        <td><i class="fas fa-trash delete-note warning-red-hover" data-id="{{ note.id }}"></i></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="container float-start" id="create-note-container">
+                <div class="row">
+                    <div class="col-auto">
+                        <input type="text" class="form-control" placeholder="New note" id="new-note-text"/>
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-success" id="create-note" type="button">Add note</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('#notes-table').DataTable({
+            columnDefs: [
+                {orderable: false, targets: 3}
+            ],
+            order: [[2, 'desc']],
+            lengthChange: false,
+            info: false,
+            searching: false,
+            pageLength: 5,
+        });
+
+        $("th:contains('Note')").css("width", "800px")
+        $("th:contains('Created by')").css("width", "80px")
+        $("th:contains('Created at')").css("width", "120px")
+    });
+
+    var $noteTextArea = $("#new-note-text")
+    $noteTextArea.val("")
+
+    // Creating and deleting notes using ajax requests to avoid page reloads. This is done specifically
+    // for notes due to the intended simple process of working with the object.
+
+    // Create a new note when the save button is clicked.
+    $("#create-note").on("click", function () {
+        var noteText = $noteTextArea.val()
+
+        if (noteText !== "") {
+            $.ajax({
+                type: "POST",
+                url: "{% url 'datasets:create_note' %}",
+                data: {
+                    "dataset_id": "{{ dataset.id }}",
+                    "note_text": noteText,
+                    "csrfmiddlewaretoken": "{{ csrf_token }}"
+                },
+                success: function (result) {
+                    $("#notes").html(result)
+                }
+            });
+        }
+    })
+
+    // Delete all selected notes when the "Delete selected" button is clicked.
+    $(".delete-note").on("click", function () {
+        var noteId = $(this).attr("data-id")
+
+        $.ajax({
+            type: "DELETE",
+            url: "{% url 'datasets:delete_note' dataset_id=dataset.id note_id=0 %}".replace("/0/", `/${noteId}/`),
+            success: function (result) {
+                $("#notes").html(result)
+            }
+        });
+    })
+</script>

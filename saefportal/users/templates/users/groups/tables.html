@@ -1,0 +1,295 @@
+{% load static %}
+
+{% if group_name %}
+    <div class="row">
+        <div class="col-{% if not admin %}6{% else %}12{% endif %}">
+            <h5 class="table-title">Members of <i>{{ group_name }}</i></h5>
+            <table class="table {% if admin %}admin-table{% endif %}" id="user-table">
+                <thead class="table-dark">
+                <tr>
+                    <th>Date joined</th>
+                    <th>Full name</th>
+                    <th>Email</th>
+                    <th>Groups</th>
+                    {% if admin %}
+                        <th>Phone</th>
+                        <th>Last login</th>
+                        <th>Is staff</th>
+                    {% endif %}
+                    {% if user.is_staff or "Admin" in user.get_group_names or admin %}
+                        <th></th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for member in members %}
+                    <tr data-groups="{{ member.organization_groups.all|join:";" }}" id="{{ member.id }}">
+                        <td>{{ member.date_joined|date }}</td>
+                        <td>{{ member.user_profile }}</td>
+                        <td>{{ member.email }}</td>
+                        <td>{{ member.organization_groups.all|join:", " }}</td>
+                        {% if admin %}
+                            <td>{{ member.user_profile.phone }}</td>
+                            <td>{{ member.last_login }}</td>
+                            <td>{{ member.is_staff }}</td>
+                            {% if group_name == "Active" %}
+                                <td>
+                                    <button type="button" class="btn btn-danger" id="deactivate-button">
+                                        Deactivate
+                                    </button>
+                                </td>
+                            {% else %}
+                                <td>
+                                    <button type="button" class="btn btn-success" id="activate-button">Activate</button>
+                                </td>
+                            {% endif %}
+                        {% else %}
+                            {% if user.is_staff or "Admin" in user.get_group_names %}
+                                <td class="action-cell">
+                                    <i class="fas fa-cog update-user"
+                                       data-form-url="{% url 'update_groups_permissions' member.id %}"></i>
+                                </td>
+                            {% endif %}
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% if user.is_staff or "Admin" in user.get_group_names %}
+                {% if not admin and group_name != "All" %}
+                    <div class="container float-start" id="edit-members-container">
+                        <div class="row">
+                            <div class="col-auto">
+                                <select class="selectpicker" id="member-select" multiple>
+                                    {% for user in users %}
+                                        <option value="{{ user.id }}">{{ user }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-auto">
+                                <button type="button" class="btn btn-primary" id="edit-members" disabled>
+                                    Edit members
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        {% if not admin %}
+            {% with user.get_all_object_permissions as user_permissions %}
+                <div class="col-6">
+                    <h5 class="table-title">Permissions of <i>{{ group_name }}</i></h5>
+                    <table class="table {% if admin %}admin-table{% endif %}" id="permission-table">
+                        <thead class="table-dark">
+                        <tr>
+                            <th>Permission</th>
+                            <th>Resource</th>
+                            <th>Resource type</th>
+                            <th>Permitted groups</th>
+                            {% if group_name != "Admin" %}
+                                <th></th>
+                            {% endif %}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for permission in permissions %}
+                            <tr id="{{ permission.id }}" data-groups="{{ permitted|join:";" }}">
+                                <td>{{ permission.get_permission_string }}</td>
+                                <td>{{ permission.get_object }}</td>
+                                <td>{{ permission.content_type|title }}</td>
+                                <td>{{ permission.get_permitted_groups|join:", " }}</td>
+                                {% if group_name != "Admin" %}
+                                    {% if permission in user_permissions and group_name in permission.get_permitted_groups %}
+                                        <td class="action-cell">
+                                            <i class="fas fa-minus-circle remove-permission warning-red-hover"
+                                               data-id="{{ permission.id }}"></i>
+                                        </td>
+                                    {% else %}
+                                        <td></td>
+                                    {% endif %}
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {% if group_name != "Admin" %}
+                        <div class="container float-start" id="edit-permissions-container">
+                            <div class="row">
+                                <div class="col-auto">
+                                    {% with user.get_grouped_permissions as grouped_user_permissions %}
+                                        <select class="selectpicker" id="permission-select" multiple>
+                                            {% for group_name, group_permissions in grouped_user_permissions.items %}
+                                                <optgroup label="{{ group_name|title }}">
+                                                    {% for permission in group_permissions %}
+                                                        <option value="{{ permission.id }}">{{ permission }}</option>
+                                                    {% endfor %}
+                                                </optgroup>
+                                            {% endfor %}
+                                        </select>
+                                    {% endwith %}
+                                </div>
+                                <div class="col-auto">
+                                    <button type="button" class="btn btn-primary" id="edit-permissions" disabled>
+                                        Edit permissions
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endwith %}
+        {% endif %}
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal" data-bs-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content"></div>
+        </div>
+    </div>
+{% endif %}
+
+<script type="text/javascript">
+    // Return the members or permission of a group based on the given object type.
+    function getGroupObjects(objectType) {
+        var groupObjects = []
+        var $tableRows = objectType === "user" ? $("#user-table tr") : $("#permission-table tr")
+
+        $tableRows.filter(function () {
+            return $(this).has("i").length
+        }).each(function () {
+            groupObjects.push($(this).attr("id"))
+        })
+
+        return groupObjects
+    }
+
+    // Edit the members of a group or the permissions of a group based on the given object type.
+    function editGroupObjects(selectedObjects, objectType) {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'edit_group_objects' %}",
+            data: {
+                "selected_objects": selectedObjects,
+                "group_name": "{{ group_name }}",
+                "object_type": objectType,
+                "csrfmiddlewaretoken": "{{ csrf_token }}"
+            },
+            success: function (result) {
+                renderTables(result, "{{ group_name }}")
+            }
+        });
+    }
+
+    // Enable the given button if the selected options is different from the initially selected options.
+    function enableIfDifferent(button, selectedOptions, initiallySelectedOptions) {
+        if (selectedOptions.sort().join(',') === initiallySelectedOptions.sort().join(',')) {
+            button.prop("disabled", true)
+        } else {
+            button.prop("disabled", false)
+        }
+    }
+
+    $(document).ready(function () {
+        // Set up datatable for the members of the currently selected group.
+        var userTableColumnDefs = [{targets: 3, render: $.fn.dataTable.render.ellipsis(20, true, false)}]
+        var userGroups = JSON.parse("{{ user.get_group_names|safe }}".replaceAll("'", "\""))
+
+        if ("{{ admin }}" === "True") {
+            userTableColumnDefs.push({orderable: false, targets: 7})
+        } else if ("{{ user.is_staff}}" === "True" || userGroups.includes("Admin")) {
+            userTableColumnDefs.push({orderable: false, targets: 4})
+        }
+
+        $("#user-table").DataTable({
+            lengthChange: false,
+            info: false,
+            dom: "ftp",
+            order: [[0, "desc"]],
+            pageLength: 10,
+            language: {searchPlaceholder: "Search users"},
+            columnDefs: userTableColumnDefs
+        });
+
+        // Set up datatable for the permissions of the currently selected group.
+        $("#permission-table").DataTable({
+            lengthChange: false,
+            info: false,
+            dom: "ftp",
+            order: "{{ group_name }}" === "Admin" ? [[1, "desc"]] : [[4, "desc"]],
+            pageLength: 10,
+            language: {searchPlaceholder: "Search permissions"},
+            columnDefs: [{targets: 3, render: $.fn.dataTable.render.ellipsis(20, true, false)}]
+        });
+
+        $(".selectpicker").selectpicker({
+            liveSearch: true
+        });
+
+        $(".update-user").each(function () {
+            $(this).modalForm({
+                formURL: $(this).data("form-url"),
+            });
+        });
+    });
+
+    // Set the initially selected options of the member select.
+    var groupMembers = getGroupObjects("user")
+    $("#member-select").selectpicker("val", groupMembers);
+
+    // Set the initially selected options of the permission select.
+    var groupPermissions = getGroupObjects("permission")
+    $("#permission-select").selectpicker("val", groupPermissions);
+
+    // When the "remove permission" icon is clicked, remove the permission from the group.
+    $(".remove-permission").on("click", function () {
+        var objectId = $(this).attr("data-id")
+        groupPermissions.splice(groupPermissions.indexOf(objectId), 1)
+
+        editGroupObjects(groupPermissions.join(","), "permission")
+    })
+
+    // Only enable the "Edit members" button if the selected options are different from the initially selected.
+    $("#member-select").on("change", function () {
+        enableIfDifferent($("#edit-members"), $(this).val(), groupMembers)
+    })
+
+    // When the "Edit members" button is clicked, update the members of the group.
+    $("#edit-members").on("click", function () {
+        var selectedUsers = $("#member-select").val().join(",")
+        editGroupObjects(selectedUsers, "user")
+    })
+
+    // Only enable the "Edit permissions" button if the selected options are different from the initially selected.
+    $("#permission-select").on("change", function () {
+        enableIfDifferent($("#edit-permissions"), $(this).val(), groupPermissions)
+    })
+
+    // When the "Edit permissions" button is clicked, update the permissions of the group.
+    $("#edit-permissions").on("click", function () {
+        var selectedPermissions = $("#permission-select").val().join(",")
+        editGroupObjects(selectedPermissions, "permission")
+    })
+
+    // When the "Activate" or "Deactivate" buttons are clicked, toggle the state of the "is_active" field of the user.
+    $("#activate-button, #deactivate-button").on("click", function () {
+        var userId = $(this).closest("tr").attr("id")
+
+        $.ajax({
+            type: "POST",
+            url: "{% url 'toggle_active' %}",
+            data: {"user_id": userId, "group_name": "{{ group_name }}", "csrfmiddlewaretoken": "{{ csrf_token }}"},
+            success: function (result) {
+                $("#tables").html(result)
+            }
+        });
+    })
+
+    // Highlight the clicked group and the groups below it.
+    if ("{{ highlight_groups }}") {
+        JSON.parse("{{ highlight_groups|safe }}".replaceAll("'", "\"")).forEach(function (group) {
+            $(`[data-group-name='${group}']`).addClass("highlighted-block")
+        })
+    }
+</script>

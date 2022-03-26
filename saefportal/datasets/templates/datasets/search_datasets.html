@@ -1,0 +1,51 @@
+{% extends "datasets/index.html" %}
+
+{% load static %}
+{% load bootstrap_pagination %}
+
+{% block content %}
+    <link rel="stylesheet" type="text/css" href="{% static "datasets/css/search_datasets.css" %}">
+
+    <p>Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ page_obj.paginator.count }}</p>
+    {% with user.get_grouped_permission_ids as permissions %}
+        {% for dataset in search_datasets %}
+            <div class="card search-result">
+                <div class="card-header pt-2">
+                    <h3>{{ dataset.get_type_icon|safe }} {{ dataset.title }}</h3>
+                </div>
+
+                <div class="card-body text-truncate">
+                    <b>Type:</b> {{ dataset.connection.get_type_display }}
+                    <br>
+                    {% if dataset.query %}
+                        <b>Query:</b> {{ dataset.query }}
+                    {% elif dataset.table %}
+                        <b>Table:</b> {{ dataset.table }}
+                    {% else %}
+                        Uploaded dataset
+                    {% endif %}
+                    <br>
+                    {{ dataset.description }}
+                </div>
+
+                {% if dataset.id in permissions.dataset.level_1 or dataset.id in permissions.dataset.level_2 %}
+                    <a href="{% url 'datasets:dataset_detail' dataset.id %}" class="stretched-link"></a>
+                {% else %}
+                    <a href="#" class="stretched-link request-view-dataset"
+                       data-form-url="{% url 'request_access' 'dataset' dataset.id 1 %}"></a>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% endwith %}
+    {% bootstrap_paginate page_obj %}
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $(".request-view-dataset").each(function () {
+            $(this).modalForm({
+                formURL: $(this).data("form-url"),
+            });
+        });
+    });
+</script>
+{% endblock %}

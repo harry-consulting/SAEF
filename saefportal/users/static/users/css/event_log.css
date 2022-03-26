@@ -1,0 +1,9 @@
+.table-title {
+    top: 30px;
+    margin-top: -30px;
+    position: relative;
+}
+
+#event-log-container .row {
+    margin-bottom: 50px;
+}

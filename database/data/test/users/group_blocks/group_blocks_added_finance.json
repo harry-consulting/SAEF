@@ -1,0 +1,98 @@
+[
+  {
+    "id": 0,
+    "parent": -1,
+    "data": [
+      {
+        "name": "blockid",
+        "value": "0"
+      }
+    ],
+    "attr": [
+      {
+        "class": "card group-card justify-content-center align-items-center no-select block"
+      },
+      {
+        "id": "new-group-block"
+      },
+      {
+        "data-group-name": "All"
+      },
+      {
+        "style": "left: 478.667px; top: 57px;"
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "parent": 0,
+    "data": [
+      {
+        "name": "blockid",
+        "value": "1"
+      }
+    ],
+    "attr": [
+      {
+        "class": "card group-card justify-content-center align-items-center no-select block"
+      },
+      {
+        "id": "new-group-block"
+      },
+      {
+        "data-group-name": "Admin"
+      },
+      {
+        "style": "left: 238.667px; top: 167px;"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "parent": 0,
+    "data": [
+      {
+        "name": "blockid",
+        "value": "2"
+      }
+    ],
+    "attr": [
+      {
+        "class": "card group-card justify-content-center align-items-center no-select block"
+      },
+      {
+        "id": "new-group-block"
+      },
+      {
+        "data-group-name": "I.T."
+      },
+      {
+        "style": "left: 478.667px; top: 167px;"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "parent": 0,
+    "data": [
+      {
+        "name": "blockid",
+        "value": "3"
+      }
+    ],
+    "attr": [
+      {
+        "class": "card group-card justify-content-center align-items-center no-select block"
+      },
+      {
+        "id": "new-group-block"
+      },
+      {
+        "data-group-name": "Finance"
+      },
+      {
+        "style": "left: 718.667px; top: 167px;"
+      }
+    ]
+  }
+]

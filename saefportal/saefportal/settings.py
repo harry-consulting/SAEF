@@ -23,23 +23,38 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', default=False, cast=bool)
+DEBUG = config("DEBUG")
 
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1'   
-    ]
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_REGISTER_NOTIFY = None
+
+MEDIA_ROOT = config("MEDIA_ROOT")
+MEDIA_URL = "/media/"
+
+FIXTURE_DIRS = ('database/data/',)
+
+ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS').split(" ")
 
 # Application definition
 
 INSTALLED_APPS = [
     'saef.apps.SaefConfig',
+    'jobs.apps.JobsConfig',
+    'datasets.apps.DatasetsConfig',
     'users.apps.UsersConfig',
     'restapi.apps.RestapiConfig',
     'analyzer.apps.AnalyzerConfig',
+    'home.apps.HomeConfig',
+    'settings.apps.SettingsConfig',
+    'datalakes.apps.DatalakesConfig',
+    'datastores.apps.DatastoresConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,10 +62,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'bootstrap4',
-    'crispy_forms',
     'django_bootstrap_breadcrumbs',
+    'django_extensions',
+    'bootstrap_modal_forms',
+    'django_cleanup.apps.CleanupConfig',
+    'bootstrap_pagination',
+    'rest_framework_tracking',
+    'django_celery_beat',
+    'simple_history',
+    'notifications',
+    'solo.apps.SoloAppConfig'
 ]
+
+os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -60,6 +84,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
 ROOT_URLCONF = 'saefportal.urls'
@@ -75,6 +100,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -88,19 +114,19 @@ WSGI_APPLICATION = 'saefportal.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'saefportal',
-        'USER': 'saefuser',
-        'PASSWORD': 'saefpassword',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        "NAME": config("SQL_DATABASE"),
+        "USER": config("SQL_USER"),
+        "PASSWORD": config("SQL_PASSWORD"),
+        "HOST": config("SQL_HOST"),
+        "PORT": config("SQL_PORT"),
     },
     'postgres_test': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres_test',
-        'USER': 'saefuser',
-        'PASSWORD': 'saefpassword',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        "NAME": config("SQL_TEST_DATABASE"),
+        "USER": config("SQL_USER"),
+        "PASSWORD": config("SQL_PASSWORD"),
+        "HOST": config("SQL_TEST_HOST"),
+        "PORT": config("SQL_PORT"),
     }
 }
 
@@ -141,51 +167,46 @@ USE_L10N = False
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+# Simple history.
+SIMPLE_HISTORY_HISTORY_CHANGE_REASON_USE_TEXT_FIELD = True
+
+# Django REST framework
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'restapi.renderers.CustomBrowsableAPIRenderer',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+    'EXCEPTION_HANDLER': 'restapi.exception_handlers.permission_denied_exception_handler'
+}
+
+AUTH_USER_MODEL = 'users.User'
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.AllowAllUsersModelBackend',
+]
+
+LOGIN_URL = '/user/login/'
+LOGOUT_REDIRECT_URL = '/user/login/'
 
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': BASE_DIR + '/log/debug.log',
-            'mode': 'w'
+        'console': {
+            'class': 'logging.StreamHandler',
         },
     },
-    'loggers': {
-        'saef': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True
-        },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
     },
 }
-
-REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
-}
-
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
-AUTH_USER_MODEL = 'users.User'
-AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBackend']
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = config('EMAIL_HOST', default='localhost')
-EMAIL_PORT = config('EMAIL_PORT', default=25, cast=int)
-EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=False, cast=bool)
-EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
-EMAIL_REGISTER_NOTIFY = config('EMAIL_REGISTER_NOTIFY', default=None)
-
-LOGIN_URL = '/user/login/'
 
 MESSAGE_TAGS = {
     messages.ERROR: 'danger',
@@ -197,94 +218,25 @@ TEST_OUTPUT_FILE_NAME = 'unittest.xml'
 
 # Calculation configuration
 COMPARISON_PROFILE_THRESHOLD = config('COMPARISON_PROFILE_THRESHOLD', cast=int, default=1)
-EXPECTED_DATASETS_N = config('EXPECTED_DATASETS_N', cast=int, default=10)
 EXPECTED_DATASET_COLUMN_DEFINITION_THRESHOLD = config('EXPECTED_DATASET_COLUMN_DEFINITION_THRESHOLD', cast=int,
                                                       default=2)
-
-# Message email configuration
-# User account activated
-MSG_EMAIL_USER_ACTIVATE_SUBJECT = 'Your account at SAEF have been activated!'
-MSG_EMAIL_USER_ACTIVATE_MSG = lambda \
-        user: f'Your email {user.email} have now been manually approved by an administrator and you are now able to access the platform.'
-
-# User account registered and notifying admin user
-MSG_EMAIL_USER_REGISTER_SUBJECT = lambda email: f'Awaiting register approval: {email}'
-MSG_EMAIL_USER_REGISTER_MSG = lambda email, phone: \
-    f'A new user have been registered and is waiting for approval Contact information:\nemail - {email}\nphone - {phone}\n'
-
-# Message alert configuration
-# Application Token
-MSG_SUCCESS_APPLICATION_TOKEN_SAVED = 'Application token has been saved'
-MSG_SUCCESS_APPLICATION_TOKEN_UPDATED = 'Application token has been successfully updated'
-MSG_SUCCESS_APPLICATION_TOKEN_DELETED = 'Application token has been deleted'
-
-# Application
-MSG_SUCCESS_APPLICATION_SAVED = 'Application has been saved'
-MSG_SUCCESS_APPLICATION_DELETED = 'Application has been deleted'
-MSG_SUCCESS_APPLICATION_UPDATED = 'Application has been successfully updated'
-
-# Job
-MSG_SUCCESS_JOB_SAVED = 'Job has been saved'
-MSG_SUCCESS_JOB_DELETED = 'Job has been deleted'
-MSG_SUCCESS_JOB_UPDATED = 'Job has been successfully updated'
-
-# Connection
-MSG_SUCCESS_CONNECTION_VALID = 'Connection is valid!'
-MSG_SUCCESS_CONNECTION_SAVED = 'Connection has been saved'
-MSG_SUCCESS_CONNECTION_DELETED = 'Connection has been deleted'
-MSG_SUCCESS_CONNECTION_UPDATE = 'Connection has been successfully updated'
-
-MSG_ERROR_CONNECTION_INVALID = lambda error: f'Invalid connection: {error}'
-MSG_ERROR_NO_DATABASE_CONNECTION = lambda connection: f'Your selected {connection.name} is not able to connect to the configured database'
-MSG_ERROR_CONNECTION_SELECT_INVALID = 'Please specify valid connection details'
-
-# Dataset
-MSG_SUCCESS_DATASET_CREATE = 'Successfully created a new dataset'
-MSG_SUCCESS_DATASET_SAVED = 'Dataset was saved successfully'
-MSG_ERROR_DATASET_FORM_INVALID = 'Form is invalid'
-
-# User
-MSG_SUCCESS_USER_LOGIN = 'Successfully logged in'
-MSG_SUCCESS_USER_LOGOUT = 'Successfully logged out!'
-MSG_INFO_USER_LOGIN_DEACTIVATED = 'Your account have not been approved yet'
-MSG_ERROR_USER_LOGIN_INCORRECT = 'You have entered your email or password incorrectly.'
-MSG_SUCCESS_USER_REGISTER = lambda email: f'Account created for {email} please wait for approval!'
-MSG_SUCCESS_USER_DEACTIVATED = lambda user: f'User account {user.email} has been successfully deactivated!'
-MSG_SUCCESS_USER_ACTIVATED = lambda user: f'User account {user.email} has been successfully activated and notified!'
-
-# Action
-MSG_SUCCESS_DATA_SAVE = 'Data was saved successfully.'
-MSG_SUCCESS_EXTRACT_UNSAVED = 'Successfully extracted scheme, to apply these changes press save!'
-
-# SQL
-MSG_ERROR_SQL_INVALID = lambda error: f'Invalid SQL query: {error}'
-
-# RESTAPI
-MSG_ERROR_INVALID_INPUT = lambda input: f'Invalid {input}'
-MSG_ERROR_REQUIRED_INPUT = lambda input: f'Required POST data {input}'
-MSG_ERROR_MISSING_OBJECT_INPUT = lambda input: f'The {input} does not exist in the system'
-MSG_ERROR_EXISTING = lambda object, status: f'A {object} with the status {status} already exist'
-
-DEVIATION_TIME_SPAN = config('DEVIATION_TIME_SPAN', cast=float, default=0.2)
-DATASET_DELTA_THRESHOLD = config('DATASET_DELTA_THRESHOLD', cast=float, default=0.5)
-DATASET_DELTA_DEVIATION = config('DATASET_DELTA_DEVIATION', cast=float, default=0.2)
 
 DISABLE_TRANSACTION_MANAGEMENT = True
 
 # Recordset settings
 SQL_QUERY_DEFAULT_LIMIT = config('SQL_QUERY_DEFAULT_LIMIT', default=50, cast=int)
 
-CRISPY_FAIL_SILENTLY = not DEBUG
-
 # Test databases
-TEST_POSTGRES_DB_NAME = config('TEST_POSTGRES_DB_NAME', default=None)
-TEST_POSTGRES_USERNAME = config('TEST_POSTGRES_USERNAME', default=None)
-TEST_POSTGRES_PASSWORD = config('TEST_POSTGRES_PASSWORD', default=None)
-TEST_POSTGRES_HOST = config('TEST_POSTGRES_HOST', default=None)
-TEST_POSTGRES_PORT = config('TEST_POSTGRES_PORT', default=None)
+TEST_POSTGRES_DB_NAME = config('SQL_TEST_DATABASE', default=None)
+TEST_POSTGRES_USERNAME = config('SQL_USER', default=None)
+TEST_POSTGRES_PASSWORD = config('SQL_PASSWORD', default=None)
+TEST_POSTGRES_HOST = config('SQL_TEST_HOST', default=None)
+TEST_POSTGRES_PORT = config('SQL_PORT', default=None)
 
 TEST_AZURE_DB_NAME = config('TEST_AZURE_DB_NAME', default=None)
-TEST_AZURE_USERNAME = config('TEST_AZURE_USERNAME', default=None)
+TEST_AZURE_USERNAME = config('TEST_AZURE_USER', default=None)
 TEST_AZURE_PASSWORD = config('TEST_AZURE_PASSWORD', default=None)
 TEST_AZURE_HOST = config('TEST_AZURE_HOST', default=None)
 TEST_AZURE_PORT = config('TEST_AZURE_PORT', default=None)
+
+DJANGO_NOTIFICATIONS_CONFIG = {'USE_JSONFIELD': True}

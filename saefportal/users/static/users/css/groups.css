@@ -1,0 +1,100 @@
+#groups-container .row {
+    margin-bottom: 30px;
+}
+
+input {
+    margin-bottom: 10px;
+}
+
+.group-card, .admin-block {
+    height: 50px;
+    width: 200px;
+}
+
+.group-card:not(.block) {
+    background-color: rgba(245, 245, 245, 1);
+    opacity: .4;
+}
+
+.no-select {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently
+                                     supported by Chrome, Edge, Opera and Firefox */
+}
+
+#canvas {
+    position: absolute;
+    height: 500px;
+    width: 70%;
+    background-color: white;
+    overflow: auto;
+}
+
+div#tables {
+    position: relative;
+}
+
+.create-flowy {
+    background-color: white !important;
+    opacity: 1 !important;
+}
+
+.create-flowy:hover {
+    cursor: grab;
+}
+
+.table-title {
+    top: 30px;
+    margin-top: -30px;
+    position: relative;
+}
+
+.block {
+    cursor: pointer;
+}
+
+.highlighted-block {
+    background-color: #0088ff !important;
+    color: white;
+}
+
+#user-table:not(.admin-table) td:not(.action-cell), #permission-table td:not(.action-cell) {
+    cursor: pointer;
+}
+
+#edit-members-container, #edit-permissions-container {
+    padding-left: 0;
+    position: relative;
+    bottom: 35px;
+    margin-bottom: -35px;
+    max-width: 500px;
+}
+
+.admin-block {
+    position: absolute;
+    z-index: 20;
+    cursor: pointer;
+}
+
+#active-block {
+    background-color: #4c964d !important;
+}
+
+#inactive-block {
+    top: 75px;
+    background-color: #cb5757 !important;
+}
+
+#activate-button, #deactivate-button {
+    padding-top: 2px;
+    padding-bottom: 2px
+}
+
+.update-user, .remove-permission {
+    cursor: pointer;
+}

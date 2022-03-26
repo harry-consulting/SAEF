@@ -1,0 +1,16 @@
+{% extends "users/authentication/authentication_base.html" %}
+
+{% block title %}Log in{% endblock title %}
+
+{% block form_submit %}
+    <button class="btn btn-outline-primary" type="submit">Log in</button>
+    <small class="text-muted ml-2">
+        <a href="{% url 'password_reset' %}">Forgot Password?</a>
+    </small>
+{% endblock form_submit %}
+
+{% block redirect %}
+    <div class="mt-4 text-center">
+        Don't have an account yet? <a href="{% url 'register' %}">Register now</a>
+    </div>
+{% endblock redirect %}

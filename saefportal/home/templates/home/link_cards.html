@@ -1,0 +1,22 @@
+<div class="col-sm">
+    <div class="card flex-row">
+        <i class="fa fa-server card-icon"></i>
+        <div class="card-body">
+            <h5 class="card-title">Manage</h5>
+            <p class="card-text">Configure connections and datasets.</p>
+        </div>
+
+        <a href="{% url 'datasets:index' %}" class="stretched-link"></a>
+    </div>
+</div>
+<div class="col-sm">
+    <div class="card flex-row">
+        <i class="fa fa-calendar card-icon"></i>
+        <div class="card-body">
+            <h5 class="card-title">Run</h5>
+            <p class="card-text">Trigger tasks and setup scheduled jobs.</p>
+        </div>
+
+        <a href="{% url 'jobs:index' %}" class="stretched-link"></a>
+    </div>
+</div>

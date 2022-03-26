@@ -1,0 +1,99 @@
+input, label {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+input {
+    max-width: 200px;
+    margin-bottom: 10px;
+}
+
+.container.user-profile input, .container.user-profile label {
+    display: block;
+}
+
+.container.user-profile, .container.email-fields {
+    margin: 0;
+    padding: 0;
+    max-width: 430px;
+}
+
+.card.settings {
+    padding: 10px 20px 20px;
+}
+
+h5 {
+    margin-top: 10px;
+}
+
+.form-check {
+    padding: 0;
+}
+
+.checkbox label {
+    margin: 0;
+}
+
+.settings-navbar {
+    max-width: 300px;
+}
+
+.list-group-item {
+    background-color: #e9e9e9;
+    color: #656565;
+}
+
+.list-group-item.active {
+    background-color: #e9e9e9;
+    color: black;
+}
+
+.list-group-item:hover {
+    background-color: unset;
+}
+
+.row, .container-fluid {
+    padding-left: 0;
+}
+
+.fa-angle-right {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 30px;
+}
+
+.btn.save {
+    margin-top: 20px;
+}
+
+.profile-task-fields input[type=number] {
+    max-width: 60px;
+    display: block;
+}
+
+.email-fields input[type=number] {
+    max-width: 70px;
+    display: block;
+}
+
+#id_email_use_tls {
+    margin-right: 0;
+}
+
+.contact-checkbox {
+    max-width: 10px;
+}
+
+.table.contacts td {
+    padding: 0;
+}
+
+#delete-datalake-connection {
+    color: black;
+}
+
+.threshold {
+    margin: 0 0 10px;
+    max-width: 50px;
+}

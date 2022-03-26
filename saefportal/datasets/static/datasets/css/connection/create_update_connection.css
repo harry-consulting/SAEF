@@ -1,0 +1,23 @@
+.modal-body input, label {
+    display: block;
+}
+
+.modal-body input[type=number] {
+    max-width: 70px;
+}
+
+.modal-body input {
+    margin-bottom: 10px;
+}
+
+.modal-body .btn.form-control {
+    max-width: 200px;
+}
+
+.modal-body #id_owner {
+    max-width: 200px;
+}
+
+.modal-body #id_root_path {
+    width: 250px!important;
+}
