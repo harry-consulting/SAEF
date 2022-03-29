@@ -1,0 +1,14 @@
+{% extends "saef/base.html" %}
+
+{% block mainsection %}
+    {% include "restapi/browsable_api.html" %}
+
+    <script type="text/javascript">
+        $("input[name=sql_query]").attr("placeholder", "SELECT * FROM dataset")
+
+        // Fix small style issues.
+        $("ul.breadcrumb").css("margin-top", "5px")
+        $("span.caret").hide()
+        $("#dropdown-container").css("width", "165px")
+    </script>
+{% endblock mainsection %}

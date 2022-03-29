@@ -1,22 +1,13 @@
-""" define the top class for all analyzers  """
 from __future__ import absolute_import, unicode_literals
-from saefportal.settings import EXPECTED_DATASETS_N, EXPECTED_DATASET_COLUMN_DEFINITION_THRESHOLD
-from saef.models import Dataset, DatasetSession
-from .analyzer import Analyzer
-from .utils import add_value, calculate_average
-from .analyzer_expected_column import AnalyzerExpectedColumn
+
+from collections import defaultdict
 
 from analyzer.models import ActualColumnProfile, ActualDatasetProfile, ExpectedDatasetProfile
-
-
-def initialize_profile():
-    return {
-        'row_count': [],
-        'column_count': [],
-        'column_definitions': [],
-        'hash_sum': [],
-        'column': {}
-    }
+from .analyzer import Analyzer
+from .analyzer_expected_column import AnalyzerExpectedColumn
+from .util import add_value, calculate_average
+from saefportal.settings import EXPECTED_DATASET_COLUMN_DEFINITION_THRESHOLD
+from settings.models import Settings
 
 
 def retrieve_most_common_column_definitions(column_definitions):
@@ -39,70 +30,67 @@ def retrieve_most_common_column_definitions(column_definitions):
 
 def initialize_column_profile(profile, name):
     if name not in profile['column']:
-        profile['column'][name] = {}
-        profile['column'][name]['min'] = []
-        profile['column'][name]['max'] = []
-        profile['column'][name]['uniqueness'] = []
-        profile['column'][name]['hash_sum'] = []
+        profile['column'][name] = defaultdict(list)
 
     return profile['column'][name]
 
 
 class AnalyzerExpectedDataset(Analyzer):
-    def __init__(self, dataset_session_pk, actual_dataset):
+    def __init__(self, dataset_run, actual_dataset_profile):
         super().__init__()
-        self.dataset_session_pk = dataset_session_pk
-        self.actual_dataset = actual_dataset
+        self.dataset_run = dataset_run
+        self.actual_dataset_profile = actual_dataset_profile
 
     def _execute_session(self):
-        dataset_session = DatasetSession.objects.get(pk=self.dataset_session_pk)
-        datasets = ActualDatasetProfile.objects.filter(dataset_session__dataset=dataset_session.dataset).order_by('-pk')[:EXPECTED_DATASETS_N]
+        settings = Settings.objects.get()
 
-        datasets_count = len(datasets)
-        if datasets_count == 0:
+        dataset_profiles = ActualDatasetProfile.objects.filter(dataset_run__dataset=self.dataset_run.dataset)
+        dataset_profiles = dataset_profiles.order_by('-pk')[:settings.profile_expected_datasets_n]
+
+        if len(dataset_profiles) == 0:
             return None
 
-        profile = initialize_profile()
+        profile = {'row_count': [], 'column_count': [], 'column_definitions': [], 'hash_sum': [], 'column': {}}
 
-        profile['column_definitions'] = []
+        for dataset_profile in dataset_profiles:
+            profile['row_count'].append(dataset_profile.row_count)
+            profile['column_count'].append(dataset_profile.column_count)
+            profile['hash_sum'].append(dataset_profile.hash_sum)
 
-        # Addition of the retrieved datasets
-        for ds in datasets:
-            profile['row_count'] = add_value(profile['row_count'], ds.row_count)
-            profile['column_count'] = add_value(profile['column_count'], ds.column_count)
-            profile['hash_sum'] = add_value(profile['hash_sum'], ds.hash_sum)
-
-            columns = ActualColumnProfile.objects.filter(dataset_profile=ds.id)
+            column_profiles = ActualColumnProfile.objects.filter(dataset_profile=dataset_profile.id)
 
             column_definitions = []
-            for col in columns:
-                column = initialize_column_profile(profile, col.name)
+
+            for column_profile in column_profiles:
+                column = initialize_column_profile(profile, column_profile.name)
 
                 # Attributes used for average calculation
-                column['min'] = add_value(column['min'], col.min)
-                column['max'] = add_value(column['max'], col.max)
-                column['uniqueness'] = add_value(column['uniqueness'], col.uniqueness)
-                column['hash_sum'] = add_value(column['hash_sum'], col.hash_sum)
+                column['min'] = add_value(column['min'], column_profile.min)
+                column['max'] = add_value(column['max'], column_profile.max)
+                column['uniqueness'].append(column_profile.uniqueness)
+                column['hash_sum'].append(column_profile.hash_sum)
 
                 # Attributes information
-                column['datatype'] = col.datatype
-                column['nullable'] = col.nullable
-                column['order'] = col.order
+                column['datatype'] = column_profile.datatype
+                column['nullable'] = column_profile.nullable
+                column['order'] = column_profile.order
 
-                column_definitions.append((col.name, col.datatype, col.nullable, col.order))
+                column_definitions.append((column_profile.name, column_profile.datatype, column_profile.nullable,
+                                           column_profile.order))
 
             profile['column_definitions'].append(column_definitions)
 
-        dataset_profile = ExpectedDatasetProfile.objects.create(actual_dataset_profile=self.actual_dataset,
-                                                                row_count=calculate_average(profile['row_count']),
-                                                                column_count=calculate_average(profile['column_count']),
-                                                                hash_sum=calculate_average(profile['hash_sum']))
+        expected_dataset_profile = ExpectedDatasetProfile.objects.create(
+            actual_dataset_profile=self.actual_dataset_profile,
+            row_count=calculate_average(profile['row_count']),
+            column_count=calculate_average(profile['column_count']),
+            hash_sum=calculate_average(profile['hash_sum']))
 
         common_column_definitions = retrieve_most_common_column_definitions(profile['column_definitions'])
 
-        for col in common_column_definitions:
-            column = profile['column'][col[0]]
-            analyzer = AnalyzerExpectedColumn(dataset_profile, col[0], column)
+        for column_profile in common_column_definitions:
+            column = profile['column'][column_profile[0]]
+            analyzer = AnalyzerExpectedColumn(expected_dataset_profile, column_profile[0], column)
             analyzer.execute()
 
-        return dataset_profile, profile
+        return expected_dataset_profile

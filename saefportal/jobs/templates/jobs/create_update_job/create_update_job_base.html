@@ -1,0 +1,153 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'jobs/css/create_update_job.css' %}">
+
+<script type="text/javascript" src="{% static 'jobs/js/jquery-cron.js' %}"></script>
+<link type="text/css" href="{% static 'jobs/css/jquery-cron.css' %}" rel="stylesheet"/>
+
+<form method="post" action="" id="job-form">
+    {% csrf_token %}
+
+    <div class="modal-header">
+        <h5 class="modal-title">{% block title %}{% endblock %}</h5>
+    </div>
+
+    <div class="modal-body">
+        <div class="container" id="name-owner-container">
+            <div class="row">
+                <div class="col">
+                    <label for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+                    {{ form.name }}
+                </div>
+                <div class="col">
+                    <label for="{{ form.owner.id_for_label }}">{{ form.owner.label }}</label>
+                    {{ form.owner }}
+                </div>
+            </div>
+        </div>
+        <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+        {{ form.description }}
+
+        <label for="{{ form.template_task.id_for_label }}" class="pt-3">Task type</label>
+        {{ form.template_task }}
+
+        <div class="form-check schedule">
+            <input class="form-check-input" type="checkbox" id="schedule-checkbox" name="schedule-checkbox">
+            <label class="form-check-label" for="schedule-checkbox">Trigger job periodically</label>
+        </div>
+
+        <div id="schedule-group">
+            <p class="separator-title">Schedule</p>
+            <hr class="separator">
+            <div class="schedule-fields ps-2">
+                <div id="cron-input"></div>
+
+                <label for="{{ form.schedule_start_time.id_for_label }}">{{ form.schedule_start_time.label }}</label>
+                {{ form.schedule_start_time }}
+            </div>
+
+            <p class="separator-title">Parameters</p>
+            <hr class="separator">
+            <div id="template-task-parameters" class="ps-2">
+                {% include "jobs/create_update_job/task_parameters.html" %}
+            </div>
+        </div>
+
+        <div class="form-check alert-container">
+            <input class="form-check-input" type="checkbox" id="alert-checkbox" name="alert-checkbox">
+            <label class="form-check-label pb-2" for="alert-checkbox">Email alerts</label>
+        </div>
+
+        <div id="alert-group">
+            {% for field in form.get_alert_group %}
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" id="submit-button">{% block submit %}{% endblock %}</button>
+    </div>
+</form>
+
+<script>
+    // When the form is submitted, attach the current cron input data.
+    $("form").submit(function () {
+        var cron_input = $("<input>").attr("type", "hidden").attr("name", "cron-input")
+            .val($("#cron-input").cron("value"))
+
+        $("#job-form").append(cron_input)
+    })
+
+    // Set up the cron input field used when triggering jobs periodically.
+    var cronInput = $("#cron-input").cron({
+        initial: "0 12 * * *",
+    });
+
+    // Set up daterangepicker used to open calender to select start datetime.
+    $(".datepicker").daterangepicker({
+        singleDatePicker: true,
+        timePicker: true,
+        timePicker24Hour: true,
+        locale: {
+            format: 'YYYY-MM-DD HH:mm'
+        },
+        parentEl: "#modal"
+    })
+
+    // Show and hide fields related to scheduled triggers and email alerts when the checkboxes are changed.
+    $("#schedule-checkbox").change(function () {
+        $("#schedule-group").toggle()
+    });
+
+    $("#alert-checkbox").change(function () {
+        $("#alert-group").toggle()
+    });
+
+    // When a task type is selected, update the form used to populate the parameters of the task.
+    $("#id_template_task").change(function () {
+        $("#template-task-parameters").show()
+
+        $.ajax({
+            type: "GET",
+            url: "{% url 'jobs:update_task_form' %}",
+            data: {"task_name": $(this).val(), "job_id": "{{ job.id }}"},
+            success: function (result) {
+                $("#template-task-parameters").html(result)
+            }
+        })
+    })
+
+    // Keep track of invalid input fields and only enable the submit button when set is empty.
+    var invalidInputs = new Set()
+    var $submitButton = $("#submit-button")
+
+    function emailValid(email) {
+        // Using RFC2822 email validation regex.
+        return email.match(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g)
+    }
+
+    // Add validation for each email alert input field.
+    $("#alert-group").find("input").each(function (index, input) {
+        $(input).focusout(function () {
+            var emails = $(this).val().split(",").map(email => email.trim())
+
+            // If all emails are valid, remove the is-invalid class.
+            if (emails.every(emailValid) || $(this).val() === "") {
+                $(input).removeAttr("class")
+                invalidInputs.delete(input)
+
+                if (invalidInputs.size === 0) {
+                    $submitButton.prop("disabled", false)
+                }
+            } else {
+                $(input).attr("class", "form-control is-invalid")
+                $submitButton.prop("disabled", true)
+                invalidInputs.add(input)
+            }
+        })
+    });
+</script>
+
+{% block initial_js_setup %}{% endblock %}

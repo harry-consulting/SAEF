@@ -1,0 +1,101 @@
+.container-fluid {
+    padding: 0;
+}
+
+#manage-accordion {
+    width: 300px;
+}
+
+.accordion-body {
+    padding: 0 0 0 15px;
+}
+
+.accordion-button {
+    padding: 10px;
+}
+
+.accordion-button:focus, .accordion-button:active {
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .125)
+}
+
+.accordion-button:not(.collapsed) {
+    color: initial;
+    background-color: white;
+}
+
+.rounded-pill {
+    margin-left: 5px;
+    display: inherit!important;
+}
+
+.card-header {
+    max-height: 50px;
+    margin: 0;
+    padding: 0;
+}
+
+.btn.btn-link {
+    color: black;
+}
+
+.fa-plus.create {
+    height: 35px;
+    width: 35px;
+    position: relative;
+    top: 5px;
+    font-size: 35px;
+    cursor: pointer;
+    color: black;
+}
+
+.search-button {
+    background: none;
+    padding: 0;
+    border: none;
+}
+
+.search-bar-container {
+    z-index: 0;
+    max-width: 150px;
+    display: inline-block;
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+
+.create-container {
+    text-align: left;
+    display: inline-block;
+}
+
+.fa-trash.delete-connection, .fa-cog.update-connection {
+    position: relative;
+    color: black;
+    cursor: pointer;
+    width: 24px;
+}
+
+.delete-connection {
+    left: 5px;
+}
+
+.list-group-item {
+    margin: 0;
+    padding: 0 0 0 5px;
+    color: black;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.col-auto.index-sidebar {
+    padding-right: 0;
+}
+
+html {
+    overflow-y: scroll;
+}
+
+.request-view-dataset {
+    cursor: pointer;
+}

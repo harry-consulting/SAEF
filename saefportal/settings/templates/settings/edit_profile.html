@@ -1,0 +1,23 @@
+<h5>Profile</h5>
+<div class="container user-profile">
+    {% for group in user_profile_form.get_grouped_fields %}
+        <div class="row">
+            {% for field in group %}
+                <div class="col">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</div>
+
+<h5>General</h5>
+<label for={{ form.timezone.id_for_label }}>{{ form.timezone.label }}</label>
+{{ form.timezone }}
+
+<script type="text/javascript">
+    $(".selectpicker").selectpicker({
+        liveSearch: true
+    });
+</script>

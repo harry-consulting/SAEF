@@ -1,0 +1,118 @@
+{% extends "saef/base.html" %}
+
+{% load static %}
+
+{% block mainsection %}
+    <link rel="stylesheet" type="text/css" href="{% static "datasets/css/index.css" %}">
+
+    <div class="container-fluid p-0">
+        <div class="row m-0">
+
+            <div class="col-auto index-sidebar mt-1">
+                <div class="search-bar-container">
+                    <div class="input-group rounded">
+                        <input type="search" class="form-control rounded" placeholder="Search" id="search-input"/>
+                        <span class="input-group-text border-0" id="search-addon">
+                            <button type="submit" class="search-button" id="search-button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="create-container mt-1">
+                    <div class="dropdown">
+                        <i class="fa fa-plus create general-blue-hover" data-bs-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false" data-boundary="window"></i>
+
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <button class="dropdown-item" type="button" id="create-connection">Add connection</button>
+                            <button class="dropdown-item" type="button" id="create-query-dataset">Add query dataset
+                            </button>
+                            <button class="dropdown-item" type="button" id="import-datasets">Import datasets</button>
+                            <button class="dropdown-item" type="button" id="upload-datasets">Upload datasets</button>
+                        </div>
+                    </div>
+                </div>
+
+                {% include "datasets/index_navbar.html" %}
+            </div>
+
+            <div class="col" style="height: 100vh">
+                {% block content %}
+                    <div class="d-flex justify-content-center align-items-center" style="height: 100vh">
+                        <div class="spinner-border" role="status" style="display: none" id="dataset-detail-spinner">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                {% endblock content %}
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal" data-bs-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content"></div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#create-connection").modalForm({
+                formURL: "{% url 'datasets:create_connection' %}"
+            });
+
+            $("#create-query-dataset").modalForm({
+                formURL: "{% url 'datasets:create_query_dataset' %}"
+            });
+
+            $("#import-datasets").modalForm({
+                formURL: "{% url 'datasets:import_datasets' %}"
+            });
+
+            $("#upload-datasets").modalForm({
+                formURL: "{% url 'datasets:upload_datasets' %}"
+            });
+        });
+
+        // When the search button is clicked make a search request using the current content of the search bar.
+        $("#search-button").on("click", function () {
+            var searchInput = $("#search-input").val()
+
+            if (searchInput) {
+                document.location.href = "{% url 'datasets:search_datasets' %}" + `?q=${searchInput}`
+            }
+        })
+
+        // When the enter key is pressed while the search input is focused, trigger the search.
+        $("#search-input").keypress(function (event) {
+            // To support multiple browsers.
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+
+            if (keycode === 13) {
+                $("#search-button").click()
+            }
+        });
+
+        // When a dataset is clicked, record the currently open tabs in the accordion.
+        $(".list-group-item").on("click", function () {
+            $(".accordion-collapse.show").each(function () {
+                localStorage.setItem($(this).attr("id"), $(this).attr("id"))
+            })
+        })
+
+        // Reopen the tabs that are saved in local storage.
+        $(".accordion-collapse").each(function () {
+            if (localStorage.getItem($(this).attr("id"))) {
+                $(this).addClass("show")
+                localStorage.removeItem($(this).attr("id"))
+            }
+        })
+
+        // When a dataset is clicked, show the spinner until the content is replaced by the dataset detail.
+        $(".list-group-item.dataset-detail").on("click", function () {
+            $("#dataset-detail-spinner").show()
+        })
+    </script>
+{% endblock mainsection %}

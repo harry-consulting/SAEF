@@ -2,7 +2,7 @@ from __future__ import absolute_import, unicode_literals
 from .analyzer import Analyzer
 from analyzer.models import ExpectedColumnProfile
 
-from .utils import calculate_average
+from .util import calculate_average
 
 
 class AnalyzerExpectedColumn(Analyzer):

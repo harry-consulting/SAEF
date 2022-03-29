@@ -1,5 +1,4 @@
 .vscode/settings.json
-saefportal/log/debug.log
 
 # Created by https://www.toptal.com/developers/gitignore/api/django
 # Edit at https://www.toptal.com/developers/gitignore?templates=django
@@ -89,13 +88,6 @@ docs/_build/
 # PyBuilder
 target/
 
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# IPython
-profile_default/
-ipython_config.py
-
 # pyenv
 .python-version
 
@@ -117,7 +109,9 @@ celerybeat.pid
 *.sage.py
 
 # Environments
+settings.ini
 .env
+.dev
 .venv
 env/
 venv/
@@ -147,8 +141,6 @@ dmypy.json
 .pytype/
 
 # End of https://www.toptal.com/developers/gitignore/api/django
-saefportal/log/debug.log
-settings.ini
 saefportal/analyzer/recordset_csv_test.csv
 *.xml
 .DS_Store
@@ -160,11 +152,20 @@ chromedriver
 
 saefportal/analyzer/tests/recordset_csv_test.csv
 
-# Csv's downloadet from Azure Blob Storage
-temp_resources/
-!.gitkeep
-
 # vscode
 .vscode/
 temp/
- 
+
+#venv
+*venv/
+
+# environment file
+.env.dev
+
+# certifiation file 
+*.pem
+
+# Ignoring locally stored datalakes.
+**/saef/gold/
+**/saef/landing/
+**/saef/work/

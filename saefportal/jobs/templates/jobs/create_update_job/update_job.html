@@ -1,0 +1,30 @@
+{% extends "jobs/create_update_job/create_update_job_base.html" %}
+
+{% block title %}Update job{% endblock %}
+{% block submit %}Update{% endblock %}
+
+{% block initial_js_setup %}
+    <script>
+        // Initially hide the schedule fields if the job does not use scheduled triggers.
+        {% with job.get_periodic_task as periodic_task %}
+            if ("{{ periodic_task }}" === "None") {
+                $("#schedule-group").hide()
+            } else {
+                $("#schedule-checkbox").prop('checked', true)
+
+                // Set the initial value of the cron input to the job's existing cron expression.
+                cronInput.cron("value", "{{ job.get_readable_cron.0 }}")
+            }
+        {% endwith %}
+
+        // Initially hide the alert fields if the job does not use alerts.
+        if ("{{ job.has_email_alerts }}" === "False") {
+            $("#alert-group").hide()
+        } else {
+            $("#alert-checkbox").prop('checked', true)
+        }
+
+        // Activating task select to insert default task parameters.
+        $("#id_template_task").change()
+    </script>
+{% endblock %}

@@ -1,0 +1,169 @@
+{% load static %}
+
+<h5>Datalake</h5>
+{% with user.user_profile.settings.datalake as datalake %}
+    {% if not datalake %}
+        {% if user.is_staff or "Admin" in user.get_group_names %}
+            <button type="button" class="btn btn-primary" id="connect-datalake">Connect to datalake</button>
+        {% endif %}
+    {% else %}
+        {% if datalake_type == "one drive datalake" %}
+            <img src="{% static 'settings/images/OneDrive-logo.svg' %}" style="height: 50px" class="pe-2">
+        {% elif datalake_type == "google drive datalake" %}
+            <img src="{% static 'settings/images/Google_Drive_icon.svg' %}" style="height: 45px" class="pe-2">
+        {% elif datalake_type == "dropbox datalake" %}
+            <img src="{% static 'settings/images/Dropbox_Icon.svg' %}" style="height: 50px">
+        {% elif datalake_type == "google cloud storage datalake" %}
+            <img src="{% static 'settings/images/Google_Cloud_Storage_icon.svg' %}" style="height: 50px" class="pe-2">
+        {% elif datalake_type == 'azure blob storage datalake' %}
+            <img src="{% static 'settings/images/azure-storage-blob.svg' %}" style="height: 50px" class="pe-2">
+        {% elif datalake_type == 'azure data lake datalake' %}
+            <img src="{% static 'settings/images/azure-data-lake.svg' %}" style="height: 50px" class="pe-2">
+        {% elif datalake_type == 'amazon s3 datalake' %}
+            <img src="{% static 'settings/images/amazon_s3_logo.svg' %}" style="height: 50px" class="pe-2">
+        {% endif %}
+        {{ datalake }}
+        {% if user.is_staff or "Admin" in user.get_group_names %}
+            <i class="fas fa-cog general-blue-hover" id="update-datalake" role="button"></i>
+            <a onclick="return confirm('Are you sure?');"
+               href="{% url 'settings:delete_datalake_connection' datalake.id %}">
+                <i class="fas fa-trash warning-red-hover" id="delete-datalake-connection"></i>
+            </a>
+        {% endif %}
+    {% endif %}
+{% endwith %}
+
+<h5>Datasets</h5>
+<div class="checkbox">
+    <label>
+        <input type="checkbox" id="refresh-checkbox" name="refresh-checkbox">
+        Refresh datasets periodically
+    </label>
+    <i tabindex="0" data-bs-trigger="focus" class="fas fa-info-circle" data-bs-toggle="popover"
+       data-bs-content="Refresh the snapshots of all datasets in the datalake according to the below frequency."></i>
+</div>
+
+<div id="refresh-frequency-container" class="ps-4">
+    <div id="refresh-cron-input" class="pb-2"></div>
+</div>
+
+<div class="checkbox">
+    <label>
+        <input type="checkbox" id="delete-outdated-checkbox" name="delete-outdated-checkbox">
+        Delete outdated snapshots periodically
+    </label>
+    <i tabindex="0" data-bs-trigger="focus" class="fas fa-info-circle" data-bs-toggle="popover"
+       data-bs-content="Delete snapshots older than the below threshold according to the below frequency.
+       The newest snapshot is never deleted."></i>
+</div>
+
+<div id="delete-outdated-container" class="ps-4">
+    Older than <input type="number" id="days" class="threshold" min="0"> days
+    <input type="number" id="hours" class="threshold" max="23" min="0"> hours
+    <input type="number" id="minutes" class="threshold" max="59" min="0"> minutes
+    <div id="delete-outdated-cron-input" class="pb-2"></div>
+</div>
+
+<div class="form-check">
+    {{ form.try_live_connection }}
+    <label id="try-live-connection" for={{ form.try_live_connection.id_for_label }} class="m-0">
+        {{ form.try_live_connection.label }}
+    </label>
+    <i tabindex="0" data-bs-trigger="focus" class="fas fa-info-circle" data-bs-toggle="popover"
+       data-bs-content="When using segments of the website that interact with your data, always try a live
+       connection to the database first. If unchecked, SAEF uses the datalake."></i>
+</div>
+
+<!-- Hidden fields that can be changed using JQuery when cron input is changed.-->
+<div style="display: none">{{ form.dataset_refresh_frequency }}</div>
+<div style="display: none">{{ form.delete_outdated_frequency }}</div>
+
+<!-- Hidden field that can be changed when the delete outdated time threshold is changed.-->
+<div style="display: none">{{ form.delete_outdated_threshold }}</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="modal" data-bs-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#connect-datalake").modalForm({
+            formURL: "{% url 'settings:create_datalake_connection' %}"
+        });
+
+        $("#update-datalake").modalForm({
+            formURL: "{% url 'settings:update_datalake_connection' %}"
+        });
+    });
+
+    // Set up the cron input field used to set the dataset update frequency.
+    var refreshCronInput = $("#refresh-cron-input").cron({
+        onChange: function () {
+            $("#id_dataset_refresh_frequency").val($(this).cron("value"))
+        }
+    });
+
+    // Set up the cron input field used to set the outdated delete frequency.
+    var deleteOutdatedCronInput = $("#delete-outdated-cron-input").cron({
+        onChange: function () {
+            $("#id_delete_outdated_frequency").val($(this).cron("value"))
+        }
+    });
+
+    // When the refresh datasets checkbox is changed, show or hide the relevant settings.
+    $("#refresh-checkbox").on("change", function () {
+        if ($(this).is(":checked")) {
+            $("#refresh-frequency-container").show()
+        } else {
+            $("#refresh-frequency-container").hide()
+        }
+    })
+
+    // When the delete outdated checkbox is changed, show or hide the relevant settings.
+    $("#delete-outdated-checkbox").on("change", function () {
+        if ($(this).is(":checked")) {
+            $("#delete-outdated-container").show()
+            $(".threshold").prop("required", true)
+        } else {
+            $("#delete-outdated-container").hide()
+            $(".threshold").prop("required", false)
+        }
+    })
+
+    // Show the dataset refresh frequency setting and update the cron input if it is set.
+    if ("{{ settings.dataset_refresh_frequency }}" !== "None") {
+        $("#refresh-checkbox").prop("checked", true)
+        refreshCronInput.cron("value", "{{ settings.dataset_refresh_frequency }}")
+    } else {
+        $("#refresh-checkbox").prop("checked", false)
+        $("#refresh-frequency-container").hide()
+    }
+
+    // Show the delete outdated settings, update the cron input and the threshold if it is set.
+    if ("{{ settings.delete_outdated_frequency }}" !== "None") {
+        $("#delete-outdated-checkbox").prop("checked", true)
+        deleteOutdatedCronInput.cron("value", "{{ settings.delete_outdated_frequency }}")
+
+        var total_minutes = "{{ settings.delete_outdated_threshold }}"
+        $("#days").val(Math.floor(total_minutes / 24 / 60))
+        $("#hours").val(Math.floor(total_minutes / 60 % 24))
+        $("#minutes").val(total_minutes % 60)
+
+        $(".threshold").prop("required", true)
+    } else {
+        $("#delete-outdated-checkbox").prop("checked", false)
+        $("#delete-outdated-container").hide()
+    }
+
+    // When the delete outdated threshold days, hours or minutes are changed, convert the change into minutes.
+    $(".threshold").on("change", function () {
+        var minutes = $("#days").val() * 1440 + $("#hours").val() * 60 + parseInt($("#minutes").val())
+
+        if (minutes < 0) {
+            minutes = 0
+        }
+        $("#id_delete_outdated_threshold").val(minutes)
+    })
+</script>

@@ -1,0 +1,15 @@
+{% extends "jobs/create_update_job/create_update_job_base.html" %}
+
+{% block title %}Create new job{% endblock %}
+{% block submit %}Create{% endblock %}
+
+{% block initial_js_setup %}
+    <script>
+        // Set the default owner to the current user.
+        $("#id_owner").val("{{ user.id }}")
+
+        // Initially hide the schedule and alert fields.
+        $("#schedule-group").hide()
+        $("#alert-group").hide()
+    </script>
+{% endblock %}

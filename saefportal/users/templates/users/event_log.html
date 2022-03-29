@@ -1,0 +1,159 @@
+{% extends "saef/base.html" %}
+{% load static %}
+
+{% block mainsection %}
+    <link rel="stylesheet" type="text/css" href="{% static 'users/css/event_log.css' %}">
+    <div class="container-fluid" id="event-log-container">
+        <div class="row pt-2">
+            <div class="col-6">
+                <h5 class="table-title">API events</h5>
+                <table class="table" id="api-event-table">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>Endpoint</th>
+                        <th>Status code</th>
+                        <th>User</th>
+                        <th>Requested at</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for api_event in api_events %}
+                        <tr>
+                            <td>{{ api_event.path }}</td>
+                            <td>{{ api_event.status_code }}</td>
+                            <td>{{ api_event.user }}</td>
+                            <td>{{ api_event.requested_at }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-6">
+                <h5 class="table-title">Administrative events</h5>
+                <table class="table" id="admin-event-table">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>Event</th>
+                        <th>By</th>
+                        <th>At</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for admin_event in admin_events %}
+                        <tr>
+                            <td>{{ admin_event.event }}</td>
+                            <td>{{ admin_event.created_by }}</td>
+                            <td>{{ admin_event.created_at }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <h5 class="table-title">SAEF events</h5>
+                <table class="table row-border" id="saef-event-table">
+                    <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Object</th>
+                        <th>Action</th>
+                        <th>By</th>
+                        <th>At</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for saef_event in saef_events %}
+                        <tr>
+                            <td>{{ saef_event.type }}</td>
+                            <td>{{ saef_event.object }}</td>
+                            <td>
+                                {% if saef_event.action == "Created" %}
+                                    <i class="fas fa-plus-circle success-green"></i>
+                                {% elif saef_event.action == "Changed" %}
+                                    <i class="fas fa-pen success-with-issue-yellow"></i>
+                                {% elif saef_event.action == "Deleted" %}
+                                    <i class="fas fa-trash warning-red"></i>
+                                {% endif %}
+                                {{ saef_event.action }}
+                            </td>
+                            <td>{{ saef_event.by }}</td>
+                            <td>{{ saef_event.at }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <h5 class="table-title">Run events</h5>
+                <table class="table row-border" id="run-event-table">
+                    <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>By</th>
+                        <th>Start time</th>
+                        <th>End time</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for run_event in run_events %}
+                        <tr>
+                            <td>{{ run_event.task }}</td>
+                            <td>{{ run_event.type }}</td>
+                            <td>{{ run_event.status|safe }}</td>
+                            <td>{{ run_event.by }}</td>
+                            <td>{{ run_event.start }}</td>
+                            <td>{{ run_event.end }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#api-event-table").DataTable({
+                lengthChange: false,
+                dom: "ftip",
+                order: [[3, "desc"]],
+                pageLength: 5,
+                language: {searchPlaceholder: "Search API events"},
+            });
+
+            $("#admin-event-table").DataTable({
+                lengthChange: false,
+                dom: "ftip",
+                order: [[2, "desc"]],
+                pageLength: 5,
+                language: {searchPlaceholder: "Search admin events"},
+                columnDefs: [{targets: 0, render: $.fn.dataTable.render.ellipsis(60, true, false)}]
+            });
+
+            $("#saef-event-table").DataTable({
+                lengthChange: false,
+                dom: "ftip",
+                order: [[4, "desc"]],
+                pageLength: 5,
+                language: {searchPlaceholder: "Search SAEF events"}
+            });
+
+            $("#run-event-table").DataTable({
+                lengthChange: false,
+                dom: "ftip",
+                order: [[4, "desc"]],
+                pageLength: 5,
+                language: {searchPlaceholder: "Search run events"}
+            });
+        });
+    </script>
+{% endblock mainsection %}

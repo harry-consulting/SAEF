@@ -1,0 +1,14 @@
+{% extends "datasets/connection/create_update_connection_base.html" %}
+
+{% block title %}Update connection{% endblock title %}
+
+{% block modal-footer %}
+    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+    <button type="submit" class="btn btn-primary">
+        Update
+        <span class="spinner-border spinner-border-sm connection" role="status" aria-hidden="true"
+              style="display: none"></span>
+    </button>
+{% endblock modal-footer %}
+
+{% block submit %}Update{% endblock submit %}

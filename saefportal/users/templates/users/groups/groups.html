@@ -1,0 +1,173 @@
+{% extends "saef/base.html" %}
+{% load static %}
+
+{% block mainsection %}
+    <link rel="stylesheet" type="text/css" href="{% static 'users/css/groups.css' %}">
+
+    <div class="container-fluid" id="groups-container">
+        <div class="row p-3">
+            {% if user.is_staff or "Admin" in user.get_group_names %}
+                <div class="col-2">
+                    <button type="button" class="btn btn-primary" id="edit-groups">Edit groups</button>
+
+                    <div id="create-group-container" style="display: none">
+                        <label for="new-group">Create a new group</label>
+                        <input class="form-control" id="new-group" placeholder="New group">
+                        <div class="card group-card justify-content-center align-items-center no-select"
+                             id="new-group-block" data-group-name="New group">
+                            New group
+                        </div>
+
+                        <button type="button" class="btn btn-success mt-3" id="save-groups">Save</button>
+                        <button type="button" class="btn btn-danger mt-3" id="cancel-edit">Cancel</button>
+                    </div>
+                </div>
+            {% endif %}
+            <div class="col-auto">
+                {% if user.is_staff or "Admin" in user.get_group_names %}
+                    <div class="card justify-content-center align-items-center no-select admin-block"
+                         data-group-name="Active" id="active-block">
+                        Active
+                    </div>
+                    <div class="card justify-content-center align-items-center no-select admin-block"
+                         data-group-name="Inactive" id="inactive-block">
+                        Inactive
+                    </div>
+                {% endif %}
+                <div id="canvas"></div>
+            </div>
+        </div>
+
+        <div id="tables" style="top: {% if user.is_staff or "Admin" in user.get_group_names %}460px;{% else %}500px;{% endif %}" class="pb-2">
+            {% include "users/groups/tables.html" %}
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        // Initially disable the save button since no changes have been made to the group structure yet.
+        $("#save-groups").prop("disabled", true)
+        $("#new-group").val("")
+
+        // Return true to allow the block to snap.
+        function onSnap() {
+            // Reset the new block input after snapping the new block.
+            $("#new-group").val("")
+            $("#new-group-block").removeClass("create-flowy").html("New group").attr("data-group-name", "New group")
+            return true
+        }
+
+        // Initialize Flowy
+        flowy(document.getElementById("canvas"), () => {}, () => {}, onSnap, () => {}, 40, 60);
+
+        // If possible, import the existing group structure into the canvas.
+        var group_structure = "{{ group_structure }}"
+
+        if (group_structure) {
+            // Clean the string to make it valid JSON.
+            var clean_group_structure = group_structure.replaceAll("&quot;", "\"").replaceAll("&lt;", "<").replaceAll("&gt;", ">")
+
+            var html_start = clean_group_structure.indexOf("\"html\"") + 8
+            var html_end = clean_group_structure.indexOf(",") - 1
+            var html = clean_group_structure.substring(html_start, html_end)
+            clean_group_structure = clean_group_structure.replace(html, html.replaceAll("\"", "\\\""))
+
+            flowy.import(JSON.parse(clean_group_structure))
+        }
+
+        // Initially turn off editing for existing group blocks.
+        $(".block").addClass("stationary-block")
+        $(".stationary-block").on("mousedown", function (event) {
+            event.stopPropagation()
+        })
+
+        // When the "Edit groups" button is clicked, enter "edit mode" where saving is required before moving on.
+        $("#edit-groups").on("click", function () {
+            $("#create-group-container").show()
+            $("#edit-groups").hide()
+            $("#save-groups").prop("disabled", false)
+
+            $("#active-block, #inactive-block").css("display", "none")
+            $(".block").removeClass("highlighted-block")
+            $(".block:not([data-group-name='All'],[data-group-name='Admin'])").removeClass("stationary-block")
+
+            $("#tables").html("<h5>Save the new group structure to see the members and permissions of the groups.</h5>")
+
+            $(".block").off("click")
+            $(".block:not([data-group-name='All'],[data-group-name='Admin'])").off("mousedown")
+        })
+
+        // When the group name input is changed, change the name of the new block and enable it.
+        $("#new-group").on("input", function () {
+            var new_text = $(this).val()
+            var $newGroupBlock = $("#new-group-block").removeClass("create-flowy")
+
+            if (new_text !== "") {
+                $newGroupBlock.html(new_text).attr("data-group-name", new_text)
+
+                var current_groups = $(".block").toArray().map((block) => $(block).attr("data-group-name").toLowerCase())
+
+                // If the group name is not already taken.
+                if (!current_groups.includes(new_text.toLowerCase())) {
+                    $newGroupBlock.addClass("create-flowy")
+                }
+            } else {
+                $newGroupBlock.html("New group").attr("data-group-name", "New group")
+            }
+        })
+
+        // When the save button is clicked, save the group structure to persistent storage.
+        $("#save-groups").on("click", function () {
+            $.ajax({
+                type: "POST",
+                url: "{% url 'update_group_structure' %}",
+                data: {"group_structure": JSON.stringify(flowy.output()), "csrfmiddlewaretoken": "{{ csrf_token }}"},
+                success: function () {
+                    location.reload()
+                }
+            });
+        })
+
+        // When the cancel button is clicked, cancel the edit and exit "edit mode".
+        $("#cancel-edit").on("click", function () {
+            location.reload()
+        })
+
+        function renderTables(result, groupName) {
+            $("#tables").html(result)
+
+            // When a row in the user/permission table is clicked, highlight the groups the row is related to.
+            if (groupName !== "Active" && groupName !== "Inactive") {
+                $("#user-table td:not(.action-cell), #permission-table td:not(.action-cell)").on("click", function () {
+                    var row = $(this).closest("tr")
+
+                    if (row.attr("data-groups")) {
+                        $(".block").removeClass("highlighted-block")
+                        var groups = row.attr("data-groups").split(";")
+
+                        groups.forEach(function (group) {
+                            $(`[data-group-name='${group}']`).addClass("highlighted-block")
+                        })
+                    }
+                })
+            }
+        }
+
+        // When a group is clicked, show the users and permissions of the group in the tables.
+        $(".block, .admin-block").on("click", function () {
+            var groupName = $(this).attr("data-group-name")
+            $(".block, .admin-block").removeClass("highlighted-block")
+
+            $.ajax({
+                type: "GET",
+                url: "{% url 'update_tables' %}",
+                data: {"group_name": groupName},
+                success: function (result) {
+                    renderTables(result, groupName)
+                }
+            });
+        })
+
+        // Initially select the "All" group, if possible.
+        $(".block[data-group-name='All']").click()
+    </script>
+{% endblock mainsection %}

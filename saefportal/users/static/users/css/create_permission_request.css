@@ -1,0 +1,16 @@
+#permission-request-container #id_message {
+    max-height: 60px;
+    max-width: 400px;
+}
+
+#permission-request-container .bootstrap-select {
+    width: 400px;
+}
+
+#permission-request-container .row {
+     margin-bottom: 10px;
+}
+
+#permission-request-container .dropdown.bootstrap-select {
+    padding-left: 0;
+}

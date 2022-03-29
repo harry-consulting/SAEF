@@ -1,0 +1,54 @@
+<div class="modal-header">
+    <h4 class="modal-title">Resource request</h4>
+</div>
+
+<div class="modal-body run-history">
+    <table class="table text-nowrap" id="resource-request-info">
+        <tr>
+            <th scope="row" style="width: 12%" class="text-right">Permission:</th>
+            <td class="text-wrap">{{ permissionrequest.permission }}</td>
+        </tr>
+        <tr>
+            <th scope="row" class="text-right">Requested by:</th>
+            <td>{{ permissionrequest.requesting_user.user_profile }} ({{ permissionrequest.requesting_user }})</td>
+        </tr>
+        <tr>
+            <th scope="row" class="text-right">Requested at:</th>
+            <td>{{ permissionrequest.requested_at }}</td>
+        </tr>
+        <tr>
+            <th scope="row" class="text-right">Recipient:</th>
+            <td>{{ permissionrequest.permission.get_object.owner.user_profile }}
+                ({{ permissionrequest.permission.get_object.owner }})</td>
+        </tr>
+        {% if permissionrequest.group %}
+            <tr>
+                <th scope="row" class="text-right">Requested for:</th>
+                <td>{{ permissionrequest.group }}</td>
+            </tr>
+        {% endif %}
+        <tr>
+            <th scope="row" class="text-right">Status:</th>
+            <td>{{ permissionrequest.get_status_display }} {{ permissionrequest.get_status_icon|safe }}</td>
+        </tr>
+        {% if permissionrequest.status_changed_at %}
+            <tr>
+                <th scope="row" class="text-right">{{ permissionrequest.get_status_display }} at:</th>
+                <td>{{ permissionrequest.status_changed_at }}</td>
+            </tr>
+        {% endif %}
+    </table>
+
+    {% if permissionrequest.message %}
+        <div class="card">
+            <div class="card-header"><b>Request message:</b></div>
+            <div class="card-body">
+                {{ permissionrequest.message }}
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+</div>

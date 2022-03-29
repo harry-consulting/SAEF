@@ -1,0 +1,18 @@
+<h5>Email server</h5>
+<div class="container email-fields">
+    {% for group in form.get_grouped_email_fields %}
+        <div class="row">
+            {% for field in group %}
+                <div class="col">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+    {{ form.email_use_tls }}
+    <label for={{ form.email_use_tls.id_for_label }}>{{ form.email_use_tls.label }}</label>
+    <i tabindex="0" data-bs-trigger="focus" class="fas fa-info-circle" data-bs-toggle="popover"
+       data-bs-content="Use a TLS (secure) connection when talking to the SMTP server."></i>
+</div>

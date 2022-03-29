@@ -1,0 +1,84 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'users/css/create_permission_request.css' %}">
+
+<form method="post" action="" id="permission-request-form">
+    {% csrf_token %}
+
+    <div class="modal-header">
+        <h5 class="modal-title">Permission request</h5>
+    </div>
+
+    <div class="modal-body">
+        <div id="alert-container"></div>
+
+        <div class="container" id="permission-request-container">
+            <div class="row">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="access-for-group"
+                           data-bs-toggle="collapse" name="access-for-group-checkbox"
+                           href="#group-select-collapse" aria-expanded="false" aria-controls="group-select-collapse">
+                    <label class="form-check-label" for="access-for-group">Request access for group</label>
+                </div>
+
+                <div class="collapse" id="group-select-collapse">
+                    {{ form.group }}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col" style="padding-left: 0">
+                    <div class="d-flex flex-column">
+                        <label for="permission-select" style="padding: 0">Permissions</label>
+                        <select class="selectpicker" id="permission-select" name="permission-select" multiple required>
+                            {% for group_name, group_permissions in grouped_permissions.items %}
+                                <optgroup label="{{ group_name|title }}">
+                                    {% for permission in group_permissions %}
+                                        <option value="{{ permission.id }}"
+                                                {% if permission.id in initial_permissions %}selected{% endif %}>
+                                            {{ permission }}
+                                        </option>
+                                    {% endfor %}
+                                </optgroup>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <label for="{{ form.message.id_for_label }}" style="padding: 0">{{ form.message.label }}</label>
+                {{ form.message }}
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Request</button>
+    </div>
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var kwargs = JSON.parse("{{ view.kwargs|safe }}".replaceAll("'", "\""))
+
+        // If the resource request is from the user getting denied access to a resource, autofill permission select.
+        if (!$.isEmptyObject(kwargs)) {
+            $("#permission-select").val(`{{ selected_permission }}`)
+            $("#permission-select").selectpicker("refresh")
+
+            // Also change the action of the form so the form posts to the correct URL.
+            var url = `/user/request_access/${kwargs["resource_type"]}/${kwargs["resource_id"]}/${kwargs["permission_level"]}/`
+            $("#permission-request-form").attr("action", url)
+
+            // Inform the user on why the permission request modal has opened.
+            $("#alert-container").html('<div class="alert alert-warning" role="alert">You do not have the required permission for that action. You can request the permission here.</div>')
+        }
+
+        $("#id_group").addClass("selectpicker")
+
+        $(".selectpicker").selectpicker({
+            liveSearch: true
+        });
+    });
+</script>

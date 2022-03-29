@@ -1,0 +1,143 @@
+.delete-note, .show-connection-string, .expand-profile, .delete-dataset, .update-dataset, #copy-dataset-key {
+    color: black;
+    cursor: pointer;
+}
+
+.expand-profile, .delete-dataset, .update-dataset {
+    font-size: 25px;
+}
+
+.delete-dataset, .update-dataset {
+    position: absolute;
+    float: right;
+}
+
+.update-dataset {
+    top: 10px;
+    right: 50px;
+}
+
+.delete-dataset {
+    top: 10px;
+    right: 20px;
+}
+
+#dataset-detail tr {
+    line-height: 15px;
+    min-height: 15px;
+    height: 15px;
+}
+
+#dataset-detail .fa-angle-down, #dataset-detail .fa-angle-up {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    font-size: 30px;
+}
+
+.dataset-key {
+    position: relative;
+    top: 10px;
+}
+
+.container.float-left {
+    margin-bottom: 10px;
+}
+
+.col-auto.column-info, .col-auto.profile.info {
+    padding-right: 0;
+}
+
+.card.definition .card-body {
+    padding: 0;
+}
+
+.card.definition {
+    max-height: 270px;
+}
+
+#dataset-detail .card-header {
+    min-height: 30px;
+}
+
+.card-body.dataset-detail {
+    padding: 0;
+}
+
+.accordion-body.dataset-detail {
+    padding: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#dataset-detail .accordion-button {
+    background-color: #f0f0f0;
+}
+
+#profile-canvas {
+    max-height: 250px;
+}
+
+.reset-chart {
+    top: 0;
+    right: 0;
+    position: absolute;
+}
+
+#dataset-detail .card-header .container-fluid {
+    padding-left: 10px;
+}
+
+tr#dataset-description {
+    line-height: 16px;
+}
+
+.table-header {
+    padding-left: 10px !important;
+}
+
+.btn:focus {
+    box-shadow: none;
+}
+
+#data-preview {
+    display: block;
+    max-width: 1000px;
+    max-height: 250px;
+    overflow: scroll
+}
+
+#column-info {
+    border: 1px solid #dee2e6;
+    display: block;
+    max-height: 250px;
+    overflow-y: scroll
+}
+
+#general-profile-info {
+    border: 1px solid #dee2e6;
+}
+
+#linked-jobs-table_wrapper .dataTables_filter {
+    float: left !important;
+}
+
+#create-note-container {
+    padding-left: 0;
+    position: relative;
+    bottom: 35px;
+    margin-bottom: -35px;
+    max-width: 1000px;
+}
+
+#new-note-text {
+    min-width: 500px;
+    margin-right: 10px;
+}
+
+#notes-action {
+    background-color: #212529;
+    border-bottom-color: white;
+    width: 5px
+}

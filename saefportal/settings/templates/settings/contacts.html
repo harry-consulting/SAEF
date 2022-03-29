@@ -1,0 +1,79 @@
+<h5>Contacts</h5>
+
+<label for=contact-name>Name</label>
+<input type="text" id="contact-name" placeholder="Contact name">
+
+<label for=contact-email>Email</label>
+<input type="text" id="contact-email" placeholder="Contact email">
+
+<button class="btn btn-success" id="add-contact" type="button" disabled>Add contact</button>
+
+<table class="table contacts">
+    <tbody>
+    {% for contact in contacts %}
+        <tr>
+            <td class="contact-checkbox"><input type="checkbox" value="{{ contact.id }}"></td>
+            <td>{{ contact.name }} - {{ contact.email }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<button class="btn btn-danger" id="delete-selected" type="button" disabled>Delete selected</button>
+
+<script type="text/javascript">
+    var $addContactButton = $("#add-contact")
+    var $nameInput = $("#contact-name")
+    var $emailInput = $("#contact-email")
+    var $deleteSelectedButton = $("#delete-selected")
+
+    // Only enable the "Add contact" button when both input fields are not empty.
+    $("#contact-name, #contact-email").on("input", function () {
+        if ($nameInput.val() && $emailInput.val()) {
+            $addContactButton.prop("disabled", false)
+        } else {
+            $addContactButton.prop("disabled", true)
+        }
+    })
+
+    // Make an ajax request to add the contact when the "Add contact" button is clicked.
+    $addContactButton.on("click", function () {
+        $.ajax({
+            type: "POST",
+            url: "{% url 'settings:add_contact' %}",
+            data: {"name": $nameInput.val(), "email": $emailInput.val(), "csrfmiddlewaretoken": "{{ csrf_token }}"},
+            success: function (result) {
+                $("#list-contacts").html(result)
+            }
+        });
+    })
+
+    // Only enable the "Delete selected" button when at least one contact is selected.
+    $(".contact-checkbox input").on("change", function () {
+        if ($(this).is(":checked") || getCheckedContacts().length > 0) {
+            $deleteSelectedButton.prop("disabled", false)
+        } else {
+            $deleteSelectedButton.prop("disabled", true)
+        }
+    })
+
+    function getCheckedContacts() {
+        return $(".contact-checkbox input").get().filter(checkbox => $(checkbox).is(":checked"))
+    }
+
+    // Make an ajax request to delete each selected contact when the "Delete selected" button is clicked.
+    $deleteSelectedButton.on("click", function () {
+        getCheckedContacts().map(input => {
+            var contactId = $(input).attr("value")
+
+            $.ajax({
+                type: "DELETE",
+                url: "{% url 'settings:delete_contact' contact_id=0 %}".replace("/0/", `/${contactId}/`),
+                success: function (result) {
+                    $("#list-contacts").html(result)
+                }
+            });
+        })
+    })
+
+</script>

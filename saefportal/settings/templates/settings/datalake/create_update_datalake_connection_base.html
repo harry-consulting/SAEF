@@ -1,0 +1,77 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'settings/css/create_update_datalake_connection.css' %}">
+
+<form method="post" action="" id="datalake-form">
+    {% csrf_token %}
+
+    <div class="modal-header">
+        <h5 class="modal-title">{% block title %}{% endblock title %}</h5>
+    </div>
+
+    <div class="modal-body">
+        <div id="alert-container"></div>
+
+        <div class="container ps-3">
+            <div class="row ps-0">
+                <label for="id_type" class="ps-0">Type</label>
+                <select class="selectpicker ps-0" id="datalake-type" name="type" required>
+                    <option value="" selected disabled>Nothing selected</option>
+                    {% for group, types in grouped_datalake_types.items %}
+                        <optgroup label="{{ group }}">
+                            {% for type in types %}
+                                <option value="{{ type.value }}">
+                                    {{ type.label }}
+                                </option>
+                            {% endfor %}
+                        </optgroup>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="row">
+                <div class="collapse ps-0" id="datalake-collapse">
+                    {% include "settings/datalake/datalake_form.html" %}
+                </div>
+            </div>
+            {% block extra_fields %}{% endblock extra_fields %}
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">
+            {% block submit %}{% endblock submit %}
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" id="submit-spinner"
+                  style="display: none"></span>
+        </button>
+    </div>
+</form>
+
+<script type="text/javascript">
+    $(".selectpicker").selectpicker()
+
+    // When a datalake is selected, make an ajax request to update the current datalake form and show it.
+    $("#datalake-type").on("change", function () {
+        var selectedDatalakeType = this.value
+
+        if (selectedDatalakeType) {
+            $.ajax({
+                type: "GET",
+                url: "{% url 'settings:update_datalake_form' %}",
+                data: {"datalake_type": selectedDatalakeType},
+                success: function (result) {
+                    $("#datalake-collapse").html(result)
+                    $("#datalake-collapse").collapse("show")
+                }
+            });
+        } else {
+            $("#datalake-collapse").collapse("hide")
+        }
+    })
+
+    // When the form is submitted, show the spinner.
+    $("#datalake-form").on("submit", function () {
+        $("#submit-spinner").show()
+    })
+</script>
+
+{% block javascript %}{% endblock javascript %}

@@ -1,0 +1,68 @@
+<div class="accordion-item">
+    <h2 class="accordion-header" id="definition-heading">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#definition-collapse" aria-expanded="true" aria-controls="definition-collapse">
+            Definition
+        </button>
+    </h2>
+    <div id="definition-collapse" class="accordion-collapse collapse" aria-labelledby="headingOne">
+        <div class="accordion-body dataset-detail" style="overflow-y: hidden">
+            {% if data_preview %}
+                <div class="container-fluid">
+                    <div class="row">
+
+                        <div class="col-3 column-info">
+                            <h5>Column types</h5>
+                            <table class="table text-nowrap" id="column-info">
+                                {% for column, type in column_types.items %}
+                                    <tr>
+                                        <th scope="row" style="width: 12%" class="text-right">{{ column }}:
+                                        </th>
+                                        <td>{{ type }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+
+                        <div class="col-9 fixed-head">
+                            <h5>Data preview <small>({{ data_overview_datetime }})</small></h5>
+                            <table class="table text-nowrap row-border" id="data-preview">
+                                <thead class="table-dark">
+                                <tr>
+                                    {% for column, _ in column_types.items %}
+                                        <th>{{ column }}</th>
+                                    {% endfor %}
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                {% for row in data_preview %}
+                                    <tr>
+                                        {% for cell in row %}
+                                            <td>{{ cell }}</td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            {% else %}
+                A live connection could not be made and no historic data overviews are available.
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#data-preview").DataTable({
+            lengthChange: false,
+            paging: false,
+            searching: false,
+            info: false
+        });
+    });
+</script>

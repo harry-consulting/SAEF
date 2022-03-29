@@ -1,0 +1,158 @@
+{% extends "datasets/index.html" %}
+
+{% load static %}
+
+{% block content %}
+    <script type="text/javascript" src="{% static "datasets/js/degree_of_change_chart.js" %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static "datasets/css/dataset_detail/dataset_detail.css" %}">
+
+    <div class="card mt-3" id="dataset-detail">
+
+        <div class="card-header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-auto">
+                        <h2>{{ dataset.get_type_icon|safe }} {{ dataset.title }}</h2>
+                    </div>
+
+                    <div class="col-auto dataset-key">
+                        Key: <span id="dataset-key">{{ dataset.key }}</span>
+                        <i class="fas fa-copy" id="copy-dataset-key" data-clipboard-target="#dataset-key"
+                           data-bs-toggle="tooltip" data-placement="auto" title="Copied!" data-bs-trigger="click"></i>
+                    </div>
+
+                    <div class="float-right">
+                        {% if dataset.id in user.get_grouped_permission_ids.dataset.level_2 %}
+                            <a href="{% url 'datasets:delete_dataset' dataset.id %}"
+                               onclick="return confirm('Are you sure?');">
+                                <i class="fas fa-trash delete-dataset warning-red-hover"></i>
+                            </a>
+                        {% else %}
+                            <i class="fas fa-trash delete-dataset warning-red-hover"
+                               id="request-delete-dataset"></i>
+                        {% endif %}
+                        <i class="fas fa-cog update-dataset general-blue-hover" id="update-dataset"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body dataset-detail">
+
+            <table class="table dataset-detail">
+                <tbody>
+                <tr>
+                    <th scope="row" style="width: 13%" class="text-right">Name:</th>
+                    <td>{{ dataset.name }}</td>
+                </tr>
+                <tr>
+                    <th scope="row" style="width: 13%" class="text-right">Owner:</th>
+                    <td>{{ dataset.owner }}</td>
+                </tr>
+                {% if dataset.query %}
+                    <tr>
+                        <th scope="row" class="text-right">Query:</th>
+                        <td id="query">{{ dataset.query }}</td>
+                    </tr>
+                {% elif dataset.table %}
+                    <tr>
+                        <th scope="row" class="text-right">Table:</th>
+                        <td>{{ dataset.table }}</td>
+                    </tr>
+                {% endif %}
+                <tr id="dataset-description">
+                    <th scope="row" class="text-right">Description:</th>
+                    <td>{{ dataset.description }}</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-right">Type:</th>
+                    <td>{{ dataset.get_connection_type_display }}</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-right">Tags:</th>
+                    <td>{{ dataset.tags }}</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-right">Status:</th>
+                    <td>{{ dataset.get_status|safe }}</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-right">Contacts:</th>
+                    <td>{{ dataset.contacts.all|join:", " }}</td>
+                </tr>
+                <tr>
+                    <th scope="row" class="text-right">Connection details:</th>
+                    <td>
+                        <i class="fas fa-eye show-connection-string" id="connection-string-button"></i>
+                        <span data-value="{{ dataset.get_connection_details }}" data-visible="false"
+                              id="connection-string"></span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="accordion" id="dataset-accordion">
+                <div class="card" id="definition">
+                    {% include "datasets/dataset_detail/definition.html" %}
+                </div>
+
+                <div class="card" id="profile">
+                    {% include "datasets/dataset_detail/profile.html" %}
+                </div>
+
+                <div class="card" id="linked-jobs">
+                    {% include "datasets/dataset_detail/linked_jobs.html" %}
+                </div>
+
+                <div class="card" id="notes">
+                    {% include "datasets/dataset_detail/notes.html" %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $("#update-dataset").modalForm({
+                formURL: "{% url 'datasets:update_dataset' dataset.id %}"
+            });
+
+            $("#request-delete-dataset").modalForm({
+                formURL: "{% url 'request_access' 'dataset' dataset.id 2 %}"
+            });
+        });
+
+        var $connectionString = $("#connection-string")
+
+        // Initially hide the connection string and show it if attached button is clicked.
+        $connectionString.html("&#9679;".repeat(40))
+
+        $("#connection-string-button").click(function () {
+            if ($connectionString.attr("data-visible") === "true") {
+                $connectionString.html("&#9679;".repeat(40))
+                $connectionString.attr("data-visible", false)
+            } else {
+                $connectionString.html($connectionString.attr("data-value"))
+                $connectionString.attr("data-visible", true)
+            }
+        })
+
+        // Set up "copy to clipboard" icon for copying the dataset key.
+        var copyDatasetKey = new Clipboard("#copy-dataset-key");
+        copyDatasetKey.on('success', (event) => {
+            event.clearSelection();
+        });
+
+        // Set up tooltip for when the dataset key is copied.
+        var $copyDatasetKey = $("#copy-dataset-key")
+        var tooltip = new bootstrap.Tooltip($copyDatasetKey)
+
+        // Manually hiding tooltip after 2 second delay.
+        $copyDatasetKey.on("show.bs.tooltip", function () {
+            setTimeout(function () {
+                $copyDatasetKey.tooltip("hide")
+            }, 2000)
+        })
+    </script>
+{% endblock content %}

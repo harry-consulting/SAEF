@@ -1,0 +1,12 @@
+.modal-body input, label {
+    display: block;
+}
+
+.modal-body input {
+    margin-bottom: 10px;
+    width: 320px;
+}
+
+.modal-body input[type=number] {
+    max-width: 60px;
+}

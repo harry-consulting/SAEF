@@ -1,0 +1,8 @@
+.card.search-result {
+    max-width: 600px;
+    margin-bottom: 20px;
+}
+
+.card.search-result .card-header {
+    padding-left: 10px;
+}

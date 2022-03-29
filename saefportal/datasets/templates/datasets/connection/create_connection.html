@@ -1,0 +1,107 @@
+{% extends "datasets/connection/create_update_connection_base.html" %}
+
+{% block title %}Create new connection{% endblock title %}
+
+{% block extra_fields %}
+    <label for="id_type">Type</label>
+    <select class="selectpicker" id="id_type" name="type" required>
+        <option value="" selected disabled>Nothing selected</option>
+        {% for group, types in grouped_connection_types.items %}
+            <optgroup label="{{ group }}">
+                {% for type in types %}
+                    <option value="{{ type.value }}">
+                        {{ type.label }}
+                    </option>
+                {% endfor %}
+            </optgroup>
+        {% endfor %}
+    </select>
+{% endblock extra_fields %}
+
+{% block collapse %}
+    <div class="collapse" id="datastore-collapse">
+        {% include "datasets/connection/datastore_form.html" %}
+    </div>
+{% endblock collapse %}
+
+{% block modal-footer %}
+    <div class="container">
+        <div class="row">
+            <div class="col ps-0">
+                <button type="button" class="btn btn-primary float-left form-control" id="test-connection">
+                    Test connection
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+                          style="display: none" id="test-connection-spinner"></span>
+                </button>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-default float-end" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary float-end">
+                    Create
+                    <span class="spinner-border spinner-border-sm connection" role="status" aria-hidden="true"
+                          style="display: none"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+{% endblock modal-footer %}
+
+{% block submit %}Create{% endblock submit %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(".selectpicker").selectpicker()
+
+        var $testConnectionButton = $("#test-connection")
+        $testConnectionButton.prop("disabled", true)
+
+        // Send an ajax request to validate the currently specified connection when the "Test connection" button is clicked.
+        $testConnectionButton.on("click", function () {
+            $("#test-connection-spinner").show()
+            $testConnectionButton.removeClass("is-invalid").removeClass("is-valid")
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'datasets:test_connection' %}",
+                data: $("form[method=post]").serializeArray(),
+                success: function (result) {
+                    $("#test-connection-spinner").hide()
+
+                    if (result.connection_valid) {
+                        $testConnectionButton.addClass("is-valid")
+                    } else {
+                        $testConnectionButton.addClass("is-invalid")
+                    }
+                }
+            });
+        })
+
+        // Set the default owner to the current user.
+        $("#id_owner").val("{{ user.id }}")
+
+        // Trigger the event listener on the connection type select to pre-populate the datastore form if possible.
+        $("#{{ form.type.id_for_label }}").change()
+
+        // When a datastore is selected, make an ajax request to update the current datastore form and show it.
+        $("#id_type").on("change", function () {
+            var selectedDatastoreType = this.value
+
+            $.ajax({
+                type: "GET",
+                url: "{% url 'datasets:update_datastore_form' %}",
+                data: {"datastore_type": selectedDatastoreType},
+                success: function (result) {
+                    $("#datastore-collapse").html(result)
+                    $("#datastore-collapse").collapse("show")
+
+                    // Only enable the test connection button for datastores without an authentication process.
+                    if (["POSTGRES", "AZURE"].includes(selectedDatastoreType)) {
+                        $("#test-connection").prop("disabled", false)
+                    } else {
+                        $("#test-connection").prop("disabled", true)
+                    }
+                }
+            });
+        })
+    </script>
+{% endblock javascript %}

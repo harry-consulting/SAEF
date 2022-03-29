@@ -1,0 +1,403 @@
+body {
+    font-family: Arial;
+    padding: 0 !important;
+    background: #f1f1f1;
+}
+
+#main {
+    flex: 1;
+    padding: 16px 16px 16px 16px;
+    margin-bottom: 30px;
+}
+
+.footer {
+    text-align: center;
+    background: #ddd;
+    font-family: arial, helvetica;
+    font-weight: bold;
+    font-size: 11px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    margin-bottom: 0;
+    margin-left: 200px;
+    z-index: 100;
+    padding-top: 15px;
+}
+
+.content-section {
+    position: relative;
+    top: 13px;
+}
+
+.card {
+    background-color: white;
+    border: none;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.form-select {
+    width: auto;
+    box-shadow: none;
+}
+
+.form-select:hover, .form-select:focus {
+    box-shadow: none;
+}
+
+.alert {
+    padding: 10px;
+    margin: 0 0 10px;
+}
+
+.fixed-head thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+/* Datatable specific rules */
+table.dataTable {
+    border: 1px solid #dee2e6;
+    border-bottom: 1px solid #dee2e6 !important;
+}
+
+table.dataTable td {
+    border: none;
+}
+
+.dataTables_filter input {
+    margin-bottom: 5px;
+}
+
+table.dataTable thead .sorting_asc {
+    background: #212529 url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    color: white;
+}
+
+table.dataTable thead .sorting_desc {
+    background: #212529 url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    color: white;
+}
+
+table.dataTable thead .sorting {
+    background: #212529 url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    color: white;
+}
+
+/* Standardized colors used for icons */
+.warning-red {
+    color: red;
+}
+
+.warning-red-hover:hover {
+    color: red !important;
+}
+
+.general-blue {
+    color: rgb(6, 69, 173);
+}
+
+.general-blue-hover:hover {
+    color: rgb(6, 69, 173) !important;
+}
+
+.success-green {
+    color: green;
+}
+
+.success-green-hover:hover {
+    color: green !important;
+}
+
+.success-with-issue-yellow {
+    color: #fca130;
+}
+
+.success-with-issue-yellow:hover {
+    color: #fca130 !important;
+}
+
+.btn.dropdown-toggle {
+    color: #212529;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+}
+
+p.help-block {
+   color: #dc3545
+}
+
+/* Sidebar.*/
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 78px;
+    background: #11101D;
+    padding: 6px 14px;
+    transition: all 0.5s ease;
+    z-index: 100;
+}
+
+.sidebar ul {
+    padding-left: 0;
+}
+
+.sidebar.open {
+    width: 250px;
+}
+
+.sidebar .logo-details {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.sidebar .logo-details .icon {
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+
+.sidebar .logo-details .logo_name {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 600;
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+
+.sidebar.open .logo-details .icon,
+.sidebar.open .logo-details .logo_name {
+    opacity: 1;
+}
+
+.sidebar .logo-details #sidebar-bars {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    font-size: 22px;
+    transition: all 0.4s ease;
+    text-align: center;
+    cursor: pointer;
+}
+
+.sidebar.open .logo-details #sidebar-bars {
+    text-align: right;
+}
+
+.sidebar i {
+    color: #fff;
+    height: 60px;
+    min-width: 50px;
+    font-size: 28px;
+    text-align: center;
+    line-height: 60px;
+}
+
+.sidebar .nav-list {
+    margin-top: 20px;
+    height: 100%;
+}
+
+.sidebar li {
+    position: relative;
+    margin: 8px 0;
+    list-style: none;
+}
+
+.sidebar li .tooltip {
+    position: absolute;
+    top: -20px;
+    left: calc(100% + 15px);
+    z-index: 3;
+    background: #fff;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 400;
+    opacity: 0;
+    white-space: nowrap;
+    pointer-events: none;
+    transition: 0s;
+}
+
+.sidebar li:hover .tooltip {
+    opacity: 1;
+    pointer-events: auto;
+    transition: all 0.4s ease;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.sidebar.open li .tooltip {
+    display: none;
+}
+
+.sidebar li a:not(.dropdown-item, .notification-item, .stretched-link) {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    border-radius: 12px;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.4s ease;
+    background: #11101D;
+}
+
+.sidebar li a:hover:not(#dropdownUser, .dropdown-item, .notification-item, .stretched-link, #notification-bell) {
+    background: #FFF;
+}
+
+.sidebar li a .links_name {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 400;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.4s;
+}
+
+.sidebar.open li a .links_name {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.sidebar li a:hover .links_name,
+.sidebar li a:hover i:not(.fa-user, .fa-bell) {
+    transition: all 0.5s ease;
+    color: #11101D;
+}
+
+.sidebar li i {
+    height: 50px;
+    line-height: 50px;
+    font-size: 18px;
+    border-radius: 12px;
+}
+
+.sidebar li.profile {
+    position: fixed;
+    height: 60px;
+    width: 78px;
+    left: 0;
+    bottom: -8px;
+    padding: 10px 14px;
+    background: #1d1b31;
+    transition: all 0.5s ease;
+}
+
+.sidebar.open li.profile {
+    width: 250px;
+}
+
+.sidebar li #profile-detail {
+    max-width: 190px;
+    opacity: 0;
+}
+
+.sidebar.open li #profile-detail {
+    opacity: 1;
+}
+
+.sidebar #notification-bell {
+    position: absolute;
+    top: 5px;
+    right: 0;
+    transform: translateY(-100%);
+    background: #1d1b31;
+    width: 100%;
+    height: 50px;
+    line-height: 60px;
+    border-radius: 0;
+    transition: all 0.5s ease;
+    padding-right: 20px;
+}
+
+.sidebar.open .profile #notification-bell {
+    width: 35px;
+    background: none;
+}
+
+#main {
+    position: relative;
+    min-height: 100vh;
+    top: 0;
+    left: 78px;
+    width: calc(100% - 78px);
+    transition: all 0.5s ease;
+}
+
+.sidebar.open ~ #main {
+    left: 250px;
+    width: calc(100% - 250px);
+}
+
+.sidebar .dropdown-menu {
+    padding-top: 0;
+    padding-bottom: 0;
+    background: #131326;
+}
+
+#dropdownUser {
+    max-height: 40px;
+}
+
+/* Notification dropdown.*/
+#notification-bell .badge {
+    position: absolute;
+    top: 6px;
+    right: 3px;
+    border-radius: 50%;
+    background-color: red;
+    color: white;
+}
+
+.sidebar.open #notification-bell .badge {
+    right: -12px;
+}
+
+.fa-bell {
+    font-size: 20px;
+}
+
+.notification-item {
+    padding-left: 10px;
+    width: 300px;
+}
+
+.notification-item a {
+    color: white;
+    text-decoration: none;
+}
+
+#notifications-dropdown .dropdown-header {
+    padding-top: 20px;
+}
+
+#notifications-dropdown {
+    max-height: 800px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    transform: translate(0px, -41px) !important;
+    padding-right: 10px;
+}
+
+.sidebar.open #notifications-dropdown {
+    transform: translate(200px, -41px) !important;
+}
+
+.no-transition, .no-transition * {
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -o-transition: none !important;
+    transition: none !important;
+}

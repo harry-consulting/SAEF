@@ -1,0 +1,34 @@
+{% for field in task_form %}
+    <div class="container float-start">
+        <div class="row">
+            <div class="col-auto" style="padding: 0">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            </div>
+            <div class="col-auto">
+                <i tabindex="0" data-bs-trigger="focus" class="fas fa-info-circle" data-bs-toggle="popover"
+                   data-bs-content="{{ field.id_for_label }}"></i>
+            </div>
+        </div>
+    </div>
+    {{ field }}
+{% endfor %}
+
+<script>
+    // Set the popover content to the given info on the field. If there is no info, remove the info icon.
+    $('[data-bs-toggle="popover"]').each(function () {
+        var $field = $(`#${$(this).attr("data-bs-content")}`)
+        var fieldInfo = $field.attr("info")
+
+        if (fieldInfo) {
+            $(this).attr("data-bs-content", fieldInfo)
+        } else {
+            $(this).hide()
+        }
+    })
+
+    // Set up all popovers on the page.
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl)
+    })
+</script>

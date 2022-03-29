@@ -1,0 +1,47 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'datasets/css/connection/create_update_connection.css' %}">
+
+<form method="post" action="" id="connection-form">
+    {% csrf_token %}
+
+    <div class="modal-header">
+        <h5 class="modal-title">{% block title %}{% endblock title %}</h5>
+    </div>
+
+    <div class="modal-body">
+        <div class="container ps-0">
+            {% for group in form.get_grouped_fields %}
+                <div class="row">
+                    {% for field in group %}
+                        <div class="col">
+                            <div class="form-group{% if field.errors %} invalid{% endif %}">
+                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {{ field }}
+                                {% for error in field.errors %}
+                                    <p class="help-block">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+            {% block extra_fields %}{% endblock extra_fields %}
+        </div>
+
+        {% block collapse %}{% endblock collapse %}
+    </div>
+
+    <div class="modal-footer">
+        {% block modal-footer %}{% endblock modal-footer %}
+    </div>
+</form>
+
+<script type="text/javascript">
+    // When the form is submitted, show the spinner.
+    $("#connection-form").on("submit", function() {
+        $(".spinner-border.connection").show()
+    })
+</script>
+
+{% block javascript %}{% endblock javascript %}

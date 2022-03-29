@@ -1,0 +1,84 @@
+{% extends "saef/base.html" %}
+{% load static %}
+
+{% block mainsection %}
+    <link rel="stylesheet" type="text/css" href="{% static 'settings/css/settings.css' %}">
+
+    <script type="text/javascript" src="{% static 'jobs/js/jquery-cron.js' %}"></script>
+    <link type="text/css" href="{% static 'jobs/css/jquery-cron.css' %}" rel="stylesheet"/>
+
+    <form method="post" action="" class="p-2">
+        {% csrf_token %}
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-2">
+                    <div class="list-group" id="list-tab" role="tablist">
+                        <a class="list-group-item list-group-item-action active" id="list-profile-list"
+                           data-bs-toggle="list"
+                           href="#list-profile" role="tab" aria-controls="profile">
+                            <i class="fas fa-pen"></i> Edit Profile
+                        </a>
+                        <a class="list-group-item list-group-item-action" id="list-connection-list"
+                           data-bs-toggle="list"
+                           href="#list-connection" role="tab" aria-controls="connection">
+                            <i class="fas fa-wifi"></i> Connection
+                        </a>
+                        <a class="list-group-item list-group-item-action" id="list-tasks-list" data-bs-toggle="list"
+                           href="#list-tasks" role="tab" aria-controls="tasks">
+                            <i class="fas fa-tasks"></i> Tasks
+                        </a>
+                        <a class="list-group-item list-group-item-action" id="list-email-list" data-bs-toggle="list"
+                           href="#list-email" role="tab" aria-controls="email">
+                            <i class="fas fa-envelope"></i> Email server
+                        </a>
+                        <a class="list-group-item list-group-item-action" id="list-contacts-list" data-bs-toggle="list"
+                           href="#list-contacts" role="tab" aria-controls="contacts">
+                            <i class="fas fa-address-book"></i> Contacts
+                        </a>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary save">Save settings</button>
+                </div>
+
+                <div class="col-10">
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="list-profile" role="tabpanel"
+                             aria-labelledby="list-profile-list">
+                            {% include "settings/edit_profile.html" %}
+                        </div>
+
+                        <div class="tab-pane fade" id="list-connection" role="tabpanel"
+                             aria-labelledby="list-connection-list">
+                            {% include "settings/connection.html" %}
+                        </div>
+
+                        <div class="tab-pane fade" id="list-tasks" role="tabpanel"
+                             aria-labelledby="list-tasks-list">
+                            {% include "settings/tasks.html" %}
+                        </div>
+
+                        <div class="tab-pane fade show" id="list-email" role="tabpanel"
+                             aria-labelledby="list-email-list">
+                            {% include "settings/email_server.html" %}
+                        </div>
+
+                        <div class="tab-pane fade show" id="list-contacts" role="tabpanel"
+                             aria-labelledby="list-contacts-list">
+                            {% include "settings/contacts.html" %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+    <script type="text/javascript">
+        // Set up all popovers on the page.
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl)
+        })
+    </script>
+{% endblock mainsection %}

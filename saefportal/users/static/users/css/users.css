@@ -1,0 +1,7 @@
+input {
+    margin-bottom: 10px;
+}
+
+div#main {
+    background: linear-gradient(to right, #075197, #437b2e)
+}

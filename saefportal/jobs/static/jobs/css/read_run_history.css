@@ -1,0 +1,15 @@
+.modal-body a:hover {
+    cursor: pointer;
+}
+
+.modal-body .dataTables_paginate {
+    float: left !important;
+}
+
+.modal-body.run-history {
+    padding: 5px;
+}
+
+.modal-body p {
+    padding-left: 15px;
+}

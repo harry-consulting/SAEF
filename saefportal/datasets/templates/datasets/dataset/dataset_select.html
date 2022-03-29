@@ -1,0 +1,70 @@
+<label for="table-select" class="d-block">
+    Datasets
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display: none"
+          id="datasets-spinner"></span>
+</label>
+<select class="selectpicker d-block" id="dataset-select" name="dataset-select" required
+        {% if select_multiple == "True" %}multiple{% endif %}>
+    {% if select_multiple == "False" %}
+        <option value="" selected disabled>Nothing selected</option>
+    {% endif %}
+    {% for type, grouped_datasets in connection_datasets.items %}
+        {% for group, datasets in grouped_datasets.items %}
+            <optgroup label="{{ group }} {% if type == 'Tables' or type == 'Views' %}({{ type }}){% endif %}">
+                {% for dataset in datasets %}
+                    <option value="{{ type }}.{{ dataset.value }}">{{ dataset.display }}</option>
+                {% endfor %}
+            </optgroup>
+        {% endfor %}
+    {% endfor %}
+</select>
+
+<script type="text/javascript">
+    $(".selectpicker").selectpicker({
+        liveSearch: true
+    });
+
+    // When a connection is selected, make an ajax request to retrieve the tables and views and populate the select.
+    $("#id_connection").on("change", function () {
+        // Disable select while data is being retrieved.
+        $("#dataset-select").prop('disabled', true);
+        $("#dataset-select").selectpicker('refresh');
+
+        var connectionId = $("#id_connection").val()
+
+        if (connectionId) {
+            $("#datasets-spinner").show()
+
+            $.ajax({
+                type: "GET",
+                url: "{% url 'datasets:connection_datasets' %}",
+                data: {"connection_id": connectionId, "select_multiple": "{{ select_multiple }}"},
+                success: function (result) {
+                    // Turn off the current event listener to avoid doubling future requests.
+                    $("#id_connection").off("change")
+
+                    $("#dataset-select-container").html(result)
+                }
+            });
+        }
+    })
+
+    // When a dataset is selected, autofill the query input with a basic SQL query using the dataset and set the file id.
+    if ($(".modal-title").text() === "Create new query dataset") {
+        $("#dataset-select").on("changed.bs.select", function () {
+            var dataset;
+            var splitCharacter = this.value.indexOf(".")
+            var split_dataset = [this.value.slice(0, splitCharacter), this.value.slice(splitCharacter + 1)]
+
+            if (split_dataset[0] === "Tables" || split_dataset[0] === "Views") {
+                dataset = split_dataset.slice(1, 3).join(".")
+                $("#id_query").val(`SELECT * FROM ${dataset}`)
+                $("#id_file_id").val(null)
+            } else {
+                dataset = JSON.parse(split_dataset[1])
+                $("#id_query").val(`SELECT * FROM \`${dataset["name"]}\``)
+                $("#id_file_id").val(dataset["id"])
+            }
+        });
+    }
+</script>

@@ -1,0 +1,102 @@
+<ul class="nav nav-pills" id="incoming-outgoing-tab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="incoming-tab" data-bs-toggle="pill"
+                data-bs-target="#incoming"
+                type="button" role="tab" aria-controls="incoming" aria-selected="true">Incoming requests
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="outgoing-tab" data-bs-toggle="pill" data-bs-target="#outgoing"
+                type="button" role="tab" aria-controls="outgoing" aria-selected="false">Outgoing
+            requests
+        </button>
+    </li>
+</ul>
+
+<div class="tab-content" id="incoming-outgoing-content">
+    <div class="tab-pane fade active show" id="incoming" role="tabpanel" aria-labelledby="incoming-tab">
+        <ul class="list-group">
+            <div class="container request-container">
+                {% if incoming_requests %}
+                    {% for request in incoming_requests %}
+                        <li class="list-group-item" id="{{ request.id }}">
+                            <div class="row">
+                                <div class="col-7 request-message incoming-request-message"
+                                     data-form-url="{% url 'permission_request' request.id %}">
+                                    <b>{{ request.requesting_user }}</b> requested permission
+                                    <b>{{ request.permission }}</b>
+                                    {% if request.group %}
+                                        for <b>{{ request.group }}</b>
+                                    {% endif %}
+                                </div>
+                                <div class="col-2">
+                                    <button type="button" class="btn btn-success accept-request">Accept
+                                    </button>
+                                </div>
+                                <div class="col-2">
+                                    <button type="button" class="btn btn-danger decline-request">Decline
+                                    </button>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    You have no incoming requests.
+                {% endif %}
+            </div>
+        </ul>
+    </div>
+
+    <div class="tab-pane fade" id="outgoing" role="tabpanel" aria-labelledby="outgoing-tab">
+        <ul class="list-group">
+            <div class="container request-container">
+                {% if outgoing_requests %}
+                    {% for request in outgoing_requests %}
+                        <li class="list-group-item" id="{{ request.id }}">
+                            <div class="row">
+                                <div class="col-8 request-message"
+                                     data-form-url="{% url 'permission_request' request.id %}">
+                                    You requested permission <b>{{ request.permission }}</b>
+                                    {% if request.group %}for <b>{{ request.group }}</b>{% endif %}
+                                </div>
+                                <div class="col-4">
+                                    Status: {{ request.get_status_display }} {{ request.get_status_icon|safe }}
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    You have no outgoing requests.
+                {% endif %}
+            </div>
+        </ul>
+    </div>
+</div>
+
+<script type="text/javascript">
+    // Set up the modal window for viewing the full permission request.
+    $(".request-message").each(function () {
+        $(this).modalForm({
+            formURL: $(this).data("form-url"),
+        });
+    });
+
+    // When the "Accept" or "Decline" button is clicked, handle the reply to the permission request.
+    $(".accept-request, .decline-request").on("click", function () {
+        var permissionRequestId = $(this).closest(".list-group-item").attr("id")
+        var reply = $(this).hasClass("accept-request")
+
+        $.ajax({
+            type: "POST",
+            url: "{% url 'reply_to_request' %}",
+            data: {
+                "reply": reply,
+                "permission_request_id": permissionRequestId,
+                "csrfmiddlewaretoken": "{{ csrf_token }}"
+            },
+            success: function (result) {
+                $("#incoming-outgoing-requests").html(result)
+            }
+        });
+    })
+</script>

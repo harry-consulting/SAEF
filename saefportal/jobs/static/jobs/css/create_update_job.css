@@ -1,0 +1,106 @@
+.modal-body input, label {
+    display: block;
+}
+
+.modal-body #id_name {
+    margin-bottom: 10px;
+}
+
+.modal-body textarea {
+    max-height: 60px;
+}
+
+.modal-body #schedule-parameters {
+    margin-top: 10px;
+}
+
+.modal-body .form-check {
+    margin-top: 10px;
+}
+
+.modal-body #cron-input {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.modal-body .number-input {
+    padding-left: 0;
+}
+
+.modal-body .number-input label {
+    margin-top: 10px;
+}
+
+.modal-body .number-input input {
+    max-width: 70px;
+    margin-right: 30px;
+}
+
+.modal-body #parameters-label {
+    margin-top: 10px;
+}
+
+.modal-body .form-check.alert-container {
+    margin-bottom: 0;
+}
+
+.modal-body .form-check.schedule {
+    margin-top: 25px;
+}
+
+.modal-body div#schedule-group, .modal-body div#alert-group {
+    padding-left: 25px;
+}
+
+.modal-body div#alert-group {
+    display: grid;
+    grid-template-columns: max-content max-content;
+    grid-gap: 5px;
+}
+
+.modal-body div#alert-group label {
+    text-align: left;
+}
+
+.modal-body div#alert-group label:after {
+    content: ":";
+}
+
+.modal-body div#alert-group input {
+    width: 250px;
+}
+
+.modal-body .schedule-fields input {
+    width: 135px;
+}
+
+.modal-body #template-task-parameters {
+    margin-top: 10px;
+}
+
+.modal-body #template-task-parameters input {
+    margin-bottom: 10px;
+    width: 320px;
+}
+
+.modal-body #template-task-parameters input[type=number] {
+    max-width: 60px;
+}
+
+.modal-body hr {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.modal-body .separator-title {
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+.modal-body #name-owner-container .col {
+    padding: 0;
+}
+
+.modal-body #id_owner {
+    max-width: 200px;
+}

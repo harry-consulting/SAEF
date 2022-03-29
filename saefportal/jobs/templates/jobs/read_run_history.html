@@ -1,0 +1,82 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'jobs/css/read_run_history.css' %}">
+
+<div class="modal-header">
+    <h4 class="modal-title">Job run history</h4>
+</div>
+
+<div class="modal-body run-history">
+    {% with job.get_job_run_history as job_run_history %}
+        {% if job_run_history %}
+            <table class="table row-border" id="run-history">
+                <thead class="table-dark">
+                <tr>
+                    <th>Start time</th>
+                    <th>End time</th>
+                    <th>Status</th>
+                    <th>Parameters</th>
+                    <th>Result</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for run in job_run_history %}
+                    <tr>
+                        <td>{{ run.start_datetime }}</td>
+                        <td>{{ run.end_datetime }}</td>
+                        <td>{{ run.get_status_icon|safe }} {{ run.get_status_display }}</td>
+                        <td class="json" data-content="{{ run.parameters }}">
+                            {% if run.parameters %}
+                                <a>JSON</a>
+                            {% endif %}
+                        </td>
+                        <td class="json" data-content="{{ run.result }}">
+                            {% if run.result %}
+                                <a>JSON</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No run history.</p>
+        {% endif %}
+    {% endwith %}
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#run-history").DataTable({
+            lengthChange: false,
+            dom: "tp",
+            order: [[0, "desc"]],
+            pageLength: 5,
+        });
+
+        $("th:contains('Start time')").css("width", "140px")
+        $("th:contains('End time')").css("width", "140px")
+        $("th:contains('Status')").css("width", "110px")
+    })
+
+    // Showing the JSON result in a new window when clicked.
+    $(".json").on("click", function () {
+        var result = $(this).attr("data-content")
+
+        if (result !== "None") {
+            var jsonResult = JSON.parse(
+                result.replaceAll("None", "'None'")
+                    .replaceAll("True", "'True'").replaceAll("False", "'False'").replaceAll("'", "\"")
+            )
+            var jsonResultString = JSON.stringify(jsonResult, null, 2)
+
+            var jsonWindow = window.open()
+            jsonWindow.document.open()
+            jsonWindow.document.write('<html><body><pre>' + jsonResultString + '</pre></body></html>');
+            jsonWindow.document.close();
+        }
+    })
+</script>

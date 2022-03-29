@@ -1,0 +1,6 @@
+<div class="pt-2">
+    {% for field in datalake_form %}
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+    {% endfor %}
+</div>

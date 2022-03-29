@@ -1,0 +1,60 @@
+{% extends "datasets/dataset/create_update_dataset_base.html" %}
+
+{% block title %}Upload datasets{% endblock title %}
+{% block submit %}Upload{% endblock submit %}
+
+{% block extra_fields %}
+    <label class="btn btn-success mt-2">
+        Add files <input type="file" name="files" multiple="" required="" id="id_files" hidden
+                         accept=".csv,.parquet,.avro,.xlsx,.xls,.xlsm,.xlsb">
+    </label>
+
+    <div id="table-container" hidden>
+        <table class="table mt-2 compact" id="file-table">
+            <thead class="table-dark compact text-wrap">
+            <tr>
+                <th>Name</th>
+                <th>File type</th>
+                <th>File size</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+{% endblock extra_fields %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#file-table").DataTable({
+                lengthChange: false,
+                info: false,
+                searching: false,
+                dom: "ftp",
+                order: [[0, "asc"]],
+                pageLength: 5,
+            });
+
+            // Set the default owner to the current user.
+            $("#id_owner").val("{{ user.id }}")
+        });
+
+        // When the file input is updated, refresh the datatable with the currently added files.
+        $("#id_files").on("change", function () {
+            var newData = [...this.files].map(function (file) {
+                var index = file.name.lastIndexOf('.');
+                var [file_name, file_type] = [file.name.slice(0, index), file.name.slice(index + 1)]
+
+                return [file_name, file_type, `${Math.ceil(file.size / 1000)} KB`]
+            })
+
+            var datatable = $("#file-table").DataTable();
+            datatable.clear();
+            datatable.rows.add(newData);
+            datatable.draw();
+
+            $("#table-container").prop("hidden", false)
+        })
+    </script>
+{% endblock javascript %}

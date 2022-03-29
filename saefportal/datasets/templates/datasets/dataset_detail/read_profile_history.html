@@ -1,0 +1,260 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'datasets/css/dataset_detail/read_profile_history.css' %}">
+
+<div class="modal-header">
+    <h3 class="modal-title">Dataset profile</h3>
+</div>
+
+<div class="modal-body">
+    <div class="container profile-history">
+        <div class="row">
+            <div class="col-4 profile-run-col">
+
+                <h5>Profile runs</h5>
+                <div class="fixed-head profile-run-list">
+                    <table class="table table-hover text-nowrap row-border" id="profile-run-list">
+                        <thead class="table-dark">
+                        <tr>
+                            <th>Started at</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for profile_run in dataset.get_profile_runs %}
+                            <tr id="profile-run-{{ profile_run.id }}">
+                                <td>
+                                    <a class="profile-run" href="#" data-value="{{ profile_run.id }}">
+                                        {{ profile_run.start_datetime }}
+                                    </a>
+                                </td>
+                                <td>{{ profile_run.get_status_icon|safe }} {{ profile_run.get_status_display }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <h5>Profile run information</h5>
+                <div class="fixed-head profile-run-info">
+                    <table class="table text-nowrap" id="profile-run-info">
+                        <tbody>
+                        <tr>
+                            <th class="text-right">Started at:</th>
+                            <td>{{ selected_run.start_datetime }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Completed at:</th>
+                            <td>{{ selected_run.end_datetime }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Status:</th>
+                            <td>{{ selected_run.get_status_icon|safe }} {{ selected_run.get_status_display }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Execution ID:</th>
+                            <td class="text-truncate">
+                                <i class="fas fa-copy" id="copy-execution-id" data-clipboard-target="#execution-id"
+                                   data-bs-toggle="tooltip" title="Copied!" data-bs-trigger="click"></i>
+                                <span id="execution-id">{{ selected_run.execution_id }}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-right">Degree of change:</th>
+                            <td class="text-truncate">{{ selected_run.result.degree_of_change }}</td>
+                        </tr>
+                        {% with selected_run.get_actual_expected_dataset_profile as actual_expected_profile %}
+                            <tr>
+                                <th class="text-right">Row count:</th>
+                                <td>
+                                    <span title="Actual">
+                                        {{ actual_expected_profile.row_count.actual }}
+                                    </span>
+                                    <small title="Expected">
+                                        ({{ actual_expected_profile.row_count.expected }})
+                                    </small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-right">Column count:</th>
+                                <td>
+                                    <span title="Actual">
+                                        {{ actual_expected_profile.column_count.actual }}
+                                    </span>
+                                    <small title="Expected">
+                                        ({{ actual_expected_profile.column_count.expected }})
+                                    </small>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="text-right">Hash sum:</th>
+                                <td>
+                                    <span title="Actual">
+                                        {{ actual_expected_profile.hash_sum.actual }}
+                                    </span>
+                                    <small title="Expected">
+                                        ({{ actual_expected_profile.hash_sum.expected }})
+                                    </small>
+                                </td>
+                            </tr>
+                        {% endwith %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <div class="col-8">
+                <h5>Column profile</h5>
+                <div class="fixed-head column-profile">
+                    <table class="table text-nowrap row-border" id="column-profile-table">
+                        <thead class="table-dark">
+                        <tr>
+                            <th>Column name</th>
+                            <th>Min</th>
+                            <th>Max</th>
+                            <th>Uniqueness</th>
+                            <th>Datatype</th>
+                            <th>Nullable</th>
+                            <th>Order</th>
+                            <th>Hash sum</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for actual_expected_column_profile in selected_run.get_actual_expected_column_profiles %}
+                            <tr>
+                                {% for field_name, field in actual_expected_column_profile.items %}
+                                    {% if field_name == "name" %}
+                                        <th scope="row">{{ actual_expected_column_profile.name }}</th>
+                                    {% else %}
+                                        <td>
+                                            <span title="Actual">{{ field.actual }}</span>
+                                            <small title="Expected">({{ field.expected }})</small>
+                                        </td>
+                                    {% endif %}
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <canvas id="expanded-profile-canvas"></canvas>
+                    <button type="button" class="btn btn-outline-primary btn-sm reset-chart"
+                            id="expanded-reset-chart-btn">
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#profile-run-list").DataTable({
+            order: [[0, "desc"]],
+            lengthChange: false,
+            paging: false,
+            searching: false,
+            info: false
+        });
+
+        $("#column-profile-table").DataTable({
+            order: [[6, "asc"]],
+            lengthChange: false,
+            paging: false,
+            searching: false,
+            info: false
+        });
+    });
+
+    // Mark the currently selected run in the profile runs table as active.
+    $("#profile-run-list tr").removeClass("table-active")
+    $("#profile-run-{{ selected_run.id }}").addClass("table-active")
+
+    // Set up "copy to clipboard" icon for copying the execution id.
+    var copyExecutionId = new Clipboard("#copy-execution-id");
+    copyExecutionId.on('success', (event) => {
+        event.clearSelection();
+    });
+
+    // Set up tooltip for when the execution ID is copied.
+    var $copyExecutionId = $("#copy-execution-id")
+    var tooltip = new bootstrap.Tooltip($copyExecutionId)
+
+    // Manually hiding tooltip after 2 second delay.
+    $copyExecutionId.on("show.bs.tooltip", function () {
+        setTimeout(function () {
+            $copyExecutionId.tooltip("hide")
+        }, 2000)
+    })
+
+    // Set up all "Actual" and "Expected" tooltips.
+    $("*[title]").tooltip({
+        placement: "top",
+        boundary: "window"
+    })
+
+    // Re-render the template with new data from the given run.
+    function updateProfileHistory(runId) {
+        $.ajax({
+            type: "GET",
+            url: "{% url 'datasets:update_profile_history' %}",
+            data: {"dataset_id": "{{ dataset.id }}", "run_id": runId},
+            success: function (result) {
+                $("#profile-history-modal-content").html(result)
+            }
+        });
+    }
+
+    // Re-render the template with new data when a profile run in the profile run list is clicked.
+    $(".profile-run").on("click", function () {
+        var runId = $(this).attr("data-value")
+        updateProfileHistory(runId)
+    })
+
+    // Set up interactive degree of change chart.
+    var $canvas = $("#expanded-profile-canvas")
+    var expandedChart = degreeOfChangeChart($canvas[0], chartData)
+
+    $("#expanded-reset-chart-btn").on("click", function () {
+        expandedChart.resetZoom();
+    })
+
+    // Re-render the template with new data when clicking a point.
+    $canvas.on("click", function (e) {
+        var points = expandedChart.getElementsAtEventForMode(e, "nearest", {intersect: true}, true);
+
+        if (points.length > 0) {
+            var clickedRunId = points[0].element["$context"].raw.id
+            updateProfileHistory(clickedRunId)
+        }
+    })
+
+    // Change the size and color of the point representing the currently selected run.
+    numPoints = expandedChart.data.datasets[0].data.length
+
+    // Initially have all colors and radii be equal.
+    pointColors = Array(numPoints).fill(expandedChart.data.datasets[0].backgroundColor)
+    pointRadii = Array(numPoints).fill(expandedChart.data.datasets[0].pointRadius)
+
+    selectedRunPointIndex = expandedChart.data.datasets[0].data.findIndex(function (element) {
+        return element.id === parseInt("{{ selected_run.id }}")
+    })
+
+    // Change color and radius for the specific point.
+    pointColors[selectedRunPointIndex] = "red"
+    pointRadii[selectedRunPointIndex] = 6
+
+    expandedChart.data.datasets[0].pointBackgroundColor = pointColors
+    expandedChart.data.datasets[0].pointRadius = pointRadii
+    expandedChart.update()
+</script>

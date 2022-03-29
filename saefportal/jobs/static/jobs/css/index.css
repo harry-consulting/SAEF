@@ -1,0 +1,19 @@
+.fa-trash.delete, .fa-play.trigger-job, .fa-cog.update-job, .read-run-history, .request-read-run-history  {
+    font-size: 25px;
+    color: black;
+    cursor: pointer;
+}
+
+.fa-plus.create {
+    height: 35px;
+    width: 35px;
+    position: relative;
+    font-size: 35px;
+    cursor: pointer;
+    color: black;
+    margin-left: 15px;
+}
+
+.dataTables_filter {
+    float: left !important;
+}

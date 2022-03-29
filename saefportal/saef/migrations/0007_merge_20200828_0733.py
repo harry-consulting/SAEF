@@ -5,10 +5,6 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('saef', '0004_auto_20200827_1339'),
-        ('saef', '0006_auto_20200826_1024'),
-    ]
+    dependencies = [('saef', '0006_auto_20200826_1024')]
 
-    operations = [
-    ]
+    operations = []

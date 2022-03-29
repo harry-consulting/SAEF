@@ -1,0 +1,14 @@
+{% extends "settings/datalake/create_update_datalake_connection_base.html" %}
+
+{% block title %}Update datalake{% endblock title %}
+
+{% block extra_fields %}
+    <div class="row pt-2">
+        <div class="form-check ms-4">
+            <input class="form-check-input" type="checkbox" id="migrate-checkbox" name="migrate-checkbox" checked>
+            <label class="form-check-label" for="migrate-checkbox">Migrate data to new datalake</label>
+        </div>
+    </div>
+{% endblock extra_fields %}
+
+{% block submit %}Update{% endblock submit %}

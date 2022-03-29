@@ -1,0 +1,21 @@
+.modal-body input, label {
+    display: block;
+}
+
+.modal-body input {
+    margin-bottom: 10px;
+}
+
+.modal-body select {
+    margin-bottom: 10px;
+    max-width: 200px;
+}
+
+.modal-body textarea {
+    max-height: 100px;
+    margin-bottom: 5px;
+}
+
+.modal-body .container {
+    padding-left: 0;
+}

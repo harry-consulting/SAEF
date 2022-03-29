@@ -1,0 +1,28 @@
+{% extends "datasets/dataset/create_update_dataset_base.html" %}
+
+{% block title %}Import datasets{% endblock title %}
+{% block submit %}Import{% endblock submit %}
+
+{% block extra_fields %}
+    <div class="row mt-3">
+        <div class="col">
+            <label for="{{ form.connection.id_for_label }}">{{ form.connection.label }}</label>
+            {{ form.connection }}
+        </div>
+        <div class="col">
+            <div id="dataset-select-container">
+                {% include "datasets/dataset/dataset_select.html" with select_multiple=True %}
+            </div>
+        </div>
+    </div>
+{% endblock extra_fields %}
+
+{% block javascript %}
+    <script type="text/javascript">
+        // Set the default owner to the current user.
+        $("#id_owner").val("{{ user.id }}")
+
+        $("#dataset-select").prop('disabled', true);
+        $("#dataset-select").selectpicker('refresh');
+    </script>
+{% endblock javascript %}
